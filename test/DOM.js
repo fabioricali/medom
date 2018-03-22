@@ -26,8 +26,9 @@ describe('Component', function () {
             cmp.append(cmpChild);
 
             const cmpChildByQuery = cmp.dom.querySelector('cmp-child');
-
-            be.err.object(DOM.get(cmpChildByQuery));
+            const result = DOM.get(cmpChildByQuery);
+            console.log(result);
+            be.err.object(result);
         });
 
         it('should be undefined', function () {
@@ -35,25 +36,38 @@ describe('Component', function () {
             be.err.undefined(DOM.get(cmp));
         });
 
-        it('should be true, nodeList', function () {
-            const html = dohtml.create(`
-            <cmp-element></cmp-element>
-            <cmp-element></cmp-element>
-            <cmp-element></cmp-element>
-            `);
-            be.err.undefined(DOM.get(html));
-        });
     });
 
     describe('getByQueryAll', function () {
 
         it('should be true, nodeList', function () {
-            const html = dohtml.create(`
-            <cmp-element></cmp-element>
-            <cmp-element></cmp-element>
-            <cmp-element></cmp-element>
-            `);
+            const cmp = new Component('<cmp-parent></cmp-parent>');
+            const cmpChild1 = new Component('<cmp-element></cmp-element>');
+            const cmpChild2 = new Component('<cmp-element></cmp-element>');
+
+            cmp.append(cmpChild1);
+            cmp.append(cmpChild2);
+
+            cmp.renderTo(document.body);
+
             let result = DOM.getByQueryAll('cmp-element');
+
+            console.log(result);
+            //be.err.undefined();
+        });
+    });
+
+    describe('getByQuery', function () {
+
+        it('should be true', function () {
+            const cmp = new Component('<cmp-parent></cmp-parent>');
+            const cmpChild1 = new Component('<div></div>');
+            const cmpChild2 = new Component('<div></div>');
+
+            cmp.append(cmpChild1);
+            cmp.append(cmpChild2);
+
+            let result = DOM.getByQueryAll('div');
 
             console.log(result);
             //be.err.undefined();

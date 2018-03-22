@@ -5,7 +5,7 @@ const arrayme = require('arrayme');
 
 class DOM {
 
-    static _rootExists(element){
+    static _rootExists(element) {
         return ROOT in element;
     }
 
@@ -20,27 +20,22 @@ class DOM {
      */
     static get(element) {
         let items = [];
-        switch (type.get(element)) {
-            case 'nodelist':
-                items = Array.from(element);
-                break;
+        let aType = type.get(element);
 
-            case 'htmlelement':
-                items = arrayme(element);
-                break;
+        if (aType === 'Array' || aType === 'NodeList') {
+            items = !Array.isArray(element) ? Array.from(element) : element;
+            let result = [];
 
-            case 'array':
-                break;
+            items.forEach(item => {
+                if (DOM._rootExists(item))
+                    result.push(DOM._getRoot(item));
+            });
+
+            return result;
+        } else if (element instanceof Element) {
+            return DOM._getRoot(element);
         }
 
-        let result = [];
-
-        items.forEach(item => {
-            if (DOM._rootExists(item))
-                result.push(DOM._getRoot(item));
-        });
-
-        return result;
     }
 
     /**

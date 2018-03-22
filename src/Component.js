@@ -1,12 +1,17 @@
-const dom = require('dohtml');
+const html = require('dohtml');
 const extend = require('defaulty');
 const {ROOT} = require('./constants');
 
 class Component {
 
     constructor(tpl, opt = {}) {
-        this.dom = dom.create(tpl);
-        this.dom[ROOT] = this;
+        Object.defineProperty(this, 'dom', {
+            value: html.create(tpl)
+        });
+
+        Object.defineProperty(this.dom, ROOT, {
+            value: this
+        });
     }
 
     /**
@@ -20,7 +25,7 @@ class Component {
             cmp = cmp.dom;
         }
 
-        dom.render(this.dom, cmp);
+        html.render(this.dom, cmp);
         return this;
     }
 
@@ -40,7 +45,7 @@ class Component {
         if (!opt.append)
             target.innerHTML = '';
 
-        dom.render(target, this.dom);
+        html.render(target, this.dom);
         return this;
     }
 
