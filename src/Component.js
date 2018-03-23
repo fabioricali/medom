@@ -1,6 +1,8 @@
 const html = require('dohtml');
 const extend = require('defaulty');
 const {ROOT} = require('./constants');
+const arrayme = require('arrayme');
+const type = require('typis');
 
 class Component {
 
@@ -15,17 +17,22 @@ class Component {
     }
 
     /**
-     * Append in component
-     * @param {Component | Component[]} cmp to append
+     * Add in component
+     * @param {Component | Component[]} cmp to add
      * @returns {Component}
      */
-    append(cmp) {
+    add(cmp) {
 
-        if (Component.isComponent(cmp)) {
-            cmp = cmp.dom;
-        }
+        cmp = arrayme(cmp);
 
-        html.render(this.dom, cmp);
+        let items = [];
+
+        cmp.forEach(item => {
+            if (Component.isComponent(item))
+                items.push(item.dom);
+        });
+
+        html.render(this.dom, items);
         return this;
     }
 

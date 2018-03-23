@@ -25,6 +25,20 @@ describe('Component', function () {
         });
     });
 
+    describe('create, template string', function () {
+        it('should not be null', function () {
+            let data = {
+                name: 'hello'
+            };
+
+            const cmp = new Component('<div>{{data.name}}</div>', {
+                state: data
+            });
+            console.log(cmp.dom.innerHTML);
+            be.err.not.null(cmp);
+        });
+    });
+
     describe('renderTo', function () {
         it('should not be null', function () {
             const cmp = new Component('<cmp-parent></cmp-parent>');
@@ -38,7 +52,7 @@ describe('Component', function () {
                 return this.dom.innerHTML;
             };
 
-            cmp.append(cmpChild);
+            cmp.add(cmpChild);
             cmpChild.setTitle();
 
             console.log(cmp);

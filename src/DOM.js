@@ -1,7 +1,6 @@
 const dom = require('dohtml');
 const {ROOT} = require('./constants');
 const type = require('typis');
-const arrayme = require('arrayme');
 
 class DOM {
 
