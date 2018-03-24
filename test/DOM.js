@@ -1,8 +1,7 @@
-const {Component, DOM} = require('../');
-const dohtml = require('dohtml');
+const {Component, DOM} = require('../index');
 const be = require('bejs');
 
-describe('Component', function () {
+describe('DOM', function () {
 
     this.timeout(5000);
 
@@ -18,59 +17,42 @@ describe('Component', function () {
         document.body.innerHTML = '';
     });
 
-    describe('get', function () {
-        it('should be true', function () {
-            const cmp = new Component('<cmp-parent></cmp-parent>');
-            const cmpChild = new Component('<cmp-child></cmp-child>');
-
-            cmp.add(cmpChild);
-
-            const cmpChildByQuery = cmp.dom.querySelector('cmp-child');
-            const result = DOM.get(cmpChildByQuery);
-            console.log(result);
-            be.err.object(result);
+    describe('createElement', function () {
+        it('should be a valid DOM element', function () {
+            const cmp = DOM.createElement('cmp-parent');
+            console.log(cmp);
+            be.err.domElement(cmp);
         });
 
-        it('should be undefined', function () {
-            const cmp = document.createElement('cmp-parent');
-            be.err.undefined(DOM.get(cmp));
+        it('should be a valid properties', function () {
+            const cmp = DOM.createElement('cmp-parent', {className: 'css-class'});
+            console.log(cmp);
+            be.err.domElement(cmp);
+            be.err.true(cmp.hasAttribute('class'));
+            be.err.equal(cmp.getAttribute('class'), 'css-class');
         });
 
-    });
+        it('should be a valid listener', function (done) {
+            const cmp = DOM.createElement('button', {onClick: () => done()});
+            console.log(cmp);
+            be.err.domElement(cmp);
+            cmp.click();
+        });
 
-    describe('getByQueryAll', function () {
-
-        it('should be true, nodeList', function () {
-            const cmp = new Component('<cmp-parent></cmp-parent>');
-            const cmpChild1 = new Component('<cmp-element></cmp-element>');
-            const cmpChild2 = new Component('<cmp-element></cmp-element>');
-
-            cmp.add(cmpChild1);
-            cmp.add(cmpChild2);
-
-            cmp.renderTo(document.body);
-
-            let result = DOM.getByQueryAll('cmp-element');
-
-            console.log(result);
-            //be.err.undefined();
+        it('should be a valid innerHTML', function () {
+            const cmp = DOM.createElement('button', null, 'hello');
+            console.log(cmp);
+            be.err.domElement(cmp);
+            be.err.equal(cmp.innerHTML, 'hello');
         });
     });
 
-    describe('getByQuery', function () {
-
-        it('should be true', function () {
-            const cmp = new Component('<cmp-parent></cmp-parent>');
-            const cmpChild1 = new Component('<div></div>');
-            const cmpChild2 = new Component('<div></div>');
-
-            cmp.add(cmpChild1);
-            cmp.add(cmpChild2);
-
-            let result = DOM.getByQueryAll('div');
-
-            console.log(result);
-            //be.err.undefined();
+    describe('renderTo', function () {
+        it('should be render to body', function () {
+            const cmp = DOM.createElement('cmp-body');
+            DOM.renderTo(document.body, cmp);
+            be.err.equal(document.body.innerHTML, '<cmp-body></cmp-body>');
         });
     });
+
 });

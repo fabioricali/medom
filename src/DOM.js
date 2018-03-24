@@ -1,59 +1,70 @@
-const dom = require('dohtml');
-const {ROOT} = require('./constants');
-const type = require('typis');
+const DOM = {
+    /**
+     * Create HTML Element
+     * @param {string} tag
+     * @param {object} [props=null]
+     * @param {string} [children]
+     * @returns {HTMLAnchorElement | HTMLAppletElement | HTMLAreaElement | HTMLAudioElement | HTMLBaseElement | HTMLBaseFontElement | HTMLQuoteElement | HTMLBodyElement | HTMLBRElement | HTMLButtonElement | HTMLCanvasElement | HTMLTableCaptionElement | HTMLTableColElement | HTMLTableColElement | HTMLDataElement | HTMLDataListElement | HTMLModElement | HTMLDirectoryElement | HTMLDivElement | HTMLDListElement | HTMLEmbedElement | HTMLFieldSetElement | HTMLFontElement | HTMLFormElement | HTMLFrameElement | HTMLFrameSetElement | HTMLHeadingElement | HTMLHeadingElement | HTMLHeadingElement | HTMLHeadingElement | HTMLHeadingElement | HTMLHeadingElement | HTMLHeadElement | HTMLHRElement | HTMLHtmlElement | HTMLIFrameElement | HTMLImageElement | HTMLInputElement | HTMLModElement | HTMLUnknownElement | HTMLLabelElement | HTMLLegendElement | HTMLLIElement | HTMLLinkElement | HTMLPreElement | HTMLMapElement | HTMLMarqueeElement | HTMLMenuElement | HTMLMetaElement | HTMLMeterElement | HTMLUnknownElement | HTMLObjectElement | HTMLOListElement | HTMLOptGroupElement | HTMLOptionElement | HTMLOutputElement | HTMLParagraphElement | HTMLParamElement | HTMLPictureElement | HTMLPreElement | HTMLProgressElement | HTMLQuoteElement | HTMLScriptElement | HTMLSelectElement | HTMLSourceElement | HTMLSpanElement | HTMLStyleElement | HTMLTableElement | HTMLTableSectionElement | HTMLTableDataCellElement | HTMLTemplateElement | HTMLTextAreaElement | HTMLTableSectionElement | HTMLTableHeaderCellElement | HTMLTableSectionElement | HTMLTimeElement | HTMLTitleElement | HTMLTableRowElement | HTMLTrackElement | HTMLUListElement | HTMLVideoElement | MSHTMLWebViewElement | HTMLPreElement}
+     */
+    createElement(tag, props, children) {
+        const el = document.createElement(tag);
 
-class DOM {
+        this.createProps(el, props);
+        this.createChildren(el, children);
 
-    static _rootExists(element) {
-        return ROOT in element;
-    }
-
-    static _getRoot(element) {
-        return element[ROOT];
-    }
+        return el;
+    },
 
     /**
-     * Get component by Element
-     * @param element
-     * @returns {*}
+     * Create attributes/listeners for HTML Element
+     * @param {HTMLElement} el
+     * @param {object} props
      */
-    static get(element) {
-        let items = [];
-        let aType = type.get(element);
+    createProps(el, props) {
+        if (!props && typeof props !== 'object') return;
 
-        if (aType === 'Array' || aType === 'NodeList') {
-            items = !Array.isArray(element) ? Array.from(element) : element;
-            let result = [];
+        const _props = Object.assign({}, props);
 
-            items.forEach(item => {
-                if (DOM._rootExists(item))
-                    result.push(DOM._getRoot(item));
-            });
-
-            return result;
-        } else if (element instanceof Element) {
-            return DOM._getRoot(element);
+        for (let i in _props) {
+            if (_props.hasOwnProperty(i)) {
+                if (i === 'className') {
+                    el.setAttribute('class', _props[i]);
+                } else if (this.isListenerProp(i)) {
+                    el.addEventListener(i.substring(2).toLowerCase(), _props[i]);
+                } else {
+                    el.setAttribute(i, _props[i]);
+                }
+            }
         }
-
-    }
-
-    /**
-     * Get component by query
-     * @param query
-     * @returns {*}
-     */
-    static getByQuery(query) {
-        return DOM.get(document.querySelector(query));
-    }
+    },
 
     /**
-     * Get components by query
-     * @param query
-     * @returns {*}
+     * Create content for HTML Element
+     * @param {HTMLElement} el
+     * @param {string} children
      */
-    static getByQueryAll(query) {
-        return DOM.get(document.querySelectorAll(query));
+    createChildren(el, children) {
+        if (!children) return;
+        el.innerHTML = children;
+    },
+
+    /**
+     * Detect if prop is a listener
+     * @param {string} prop
+     * @returns {boolean}
+     */
+    isListenerProp(prop) {
+        return /^on.*$/.test(prop);
+    },
+
+    /**
+     * Render Element to target
+     * @param {HTMLElement} target
+     * @param {HTMLElement | NodeList} el
+     */
+    renderTo(target, el) {
+        target.appendChild(el);
     }
-}
+};
 
 module.exports = DOM;

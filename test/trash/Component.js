@@ -1,4 +1,4 @@
-const {Component} = require('../');
+const {Component} = require('../../index');
 const be = require('bejs');
 
 describe('Component', function () {
