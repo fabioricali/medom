@@ -1,9 +1,13 @@
- class Component {
-
-    constructor(tag, props, children) {
-        const el = document.createElement(tag);
+class Component {
+    constructor(props) {
+        this.type = 'MEDOM';
+        this.props = props;
     }
 
- }
+    setState(state) {
+        this.state = Object.assign({}, this.state, state);
+        console.log(this);
+    }
+}
 
- module.exports = Component;
+module.exports = Component;

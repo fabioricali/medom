@@ -1,10 +1,12 @@
+const {TYPE} = require('./constants');
+
 const DOM = {
     /**
      * Create HTML Element
      * @param {string} tag
      * @param {object} [props=null]
      * @param {string} [children]
-     * @returns {HTMLAnchorElement | HTMLAppletElement | HTMLAreaElement | HTMLAudioElement | HTMLBaseElement | HTMLBaseFontElement | HTMLQuoteElement | HTMLBodyElement | HTMLBRElement | HTMLButtonElement | HTMLCanvasElement | HTMLTableCaptionElement | HTMLTableColElement | HTMLTableColElement | HTMLDataElement | HTMLDataListElement | HTMLModElement | HTMLDirectoryElement | HTMLDivElement | HTMLDListElement | HTMLEmbedElement | HTMLFieldSetElement | HTMLFontElement | HTMLFormElement | HTMLFrameElement | HTMLFrameSetElement | HTMLHeadingElement | HTMLHeadingElement | HTMLHeadingElement | HTMLHeadingElement | HTMLHeadingElement | HTMLHeadingElement | HTMLHeadElement | HTMLHRElement | HTMLHtmlElement | HTMLIFrameElement | HTMLImageElement | HTMLInputElement | HTMLModElement | HTMLUnknownElement | HTMLLabelElement | HTMLLegendElement | HTMLLIElement | HTMLLinkElement | HTMLPreElement | HTMLMapElement | HTMLMarqueeElement | HTMLMenuElement | HTMLMetaElement | HTMLMeterElement | HTMLUnknownElement | HTMLObjectElement | HTMLOListElement | HTMLOptGroupElement | HTMLOptionElement | HTMLOutputElement | HTMLParagraphElement | HTMLParamElement | HTMLPictureElement | HTMLPreElement | HTMLProgressElement | HTMLQuoteElement | HTMLScriptElement | HTMLSelectElement | HTMLSourceElement | HTMLSpanElement | HTMLStyleElement | HTMLTableElement | HTMLTableSectionElement | HTMLTableDataCellElement | HTMLTemplateElement | HTMLTextAreaElement | HTMLTableSectionElement | HTMLTableHeaderCellElement | HTMLTableSectionElement | HTMLTimeElement | HTMLTitleElement | HTMLTableRowElement | HTMLTrackElement | HTMLUListElement | HTMLVideoElement | MSHTMLWebViewElement | HTMLPreElement}
+     * @returns {HTMLElement}
      */
     createElement(tag, props, children) {
         const el = document.createElement(tag);
@@ -60,10 +62,14 @@ const DOM = {
     /**
      * Render Element to target
      * @param {HTMLElement} target
-     * @param {HTMLElement | NodeList} el
+     * @param {HTMLElement | Component} el
      */
     renderTo(target, el) {
-        target.appendChild(el);
+        target.appendChild(
+            el.type === TYPE
+                ? el.render()
+                : el
+        );
     }
 };
 
