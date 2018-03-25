@@ -27,16 +27,82 @@ describe('Component', function () {
 
     describe('create, template string', function () {
         it('should not be null', function () {
-            let data = {
-                name: 'hello'
-            };
-
-            const cmp = new Component('<div>{{data.name}}</div>', {
-                state: data
+            const cmp = new Component('<div>{{name}}</div>', {
+                state: {
+                    name: 'Fabio'
+                }
             });
+
             console.log(cmp.dom.innerHTML);
-            be.err.not.null(cmp);
+            be.err.equal(cmp.dom.innerHTML, 'Fabio');
         });
+
+        it('should be update', function () {
+
+            const cmp = new Component('<div>{{name}}</div>', {
+                state: {
+                    name: 'Fabio'
+                }
+            });
+
+            console.log(cmp.dom.innerHTML);
+            be.err.equal(cmp.dom.innerHTML, 'Fabio');
+
+            cmp.setState({
+                name: 'Mike'
+            });
+
+            be.err.equal(cmp.dom.innerHTML, 'Mike');
+        });
+
+        it('should be update and listener redefined', function (done) {
+
+            const cmp = new Component(`<div>{{name}} - {{now}}</div>`, {
+                state: {
+                    name: 'Fabio',
+                    now: new Date().toLocaleDateString()
+                },
+                listener: {
+                    click: function() {
+                        console.log(this);
+                        done()
+                    }
+                }
+            });
+
+            cmp.setState({
+                name: 'Mike'
+            });
+
+            be.err.equal(cmp.dom.innerHTML, 'Mike - ' + new Date().toLocaleDateString());
+
+            cmp.dom.click();
+        });
+
+        it('should be update and children redefined', function (done) {
+
+            const cmp = new Component(`<div>{{name}} - {{now}}</div>`, {
+                state: {
+                    name: 'Fabio',
+                    now: new Date().toLocaleDateString()
+                },
+                listener: {
+                    click: function() {
+                        console.log(this);
+                        done()
+                    }
+                }
+            });
+
+            cmp.setState({
+                name: 'Mike'
+            });
+
+            be.err.equal(cmp.dom.innerHTML, 'Mike - ' + new Date().toLocaleDateString());
+
+            cmp.dom.click();
+        });
+
     });
 
     describe('renderTo', function () {

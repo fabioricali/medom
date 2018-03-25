@@ -3,17 +3,47 @@ const extend = require('defaulty');
 const {ROOT} = require('./constants');
 const arrayme = require('arrayme');
 const type = require('typis');
+const Handlebars = require('handlebars');
 
 class Component {
 
-    constructor(tpl, opt = {}) {
-        Object.defineProperty(this, 'dom', {
-            value: html.create(tpl)
+    constructor(tpl, cfg = {}) {
+
+        this.cfg = extend.copy(cfg, {
+            state: {},
+            listener: {}
         });
+
+        this.tpl = tpl;
+
+        this._createElement();
 
         Object.defineProperty(this.dom, ROOT, {
             value: this
         });
+
+    }
+
+    _createElement() {
+        const template = Handlebars.compile(this.tpl);
+        const el = html.create(template(this.cfg.state));
+
+        if (this.dom && this.dom.parentNode) {
+            this.dom.parentNode.replaceChild(el, this.dom);
+        }
+
+        this.dom = el;
+
+        for (let event in this.cfg.listener) {
+            if (this.cfg.listener.hasOwnProperty(event)) {
+                this.dom.addEventListener(event, this.cfg.listener[event]);
+            }
+        }
+    }
+
+    setState(state = {}) {
+        this.cfg.state = extend.copy(state, this.cfg.state);
+        this._createElement();
     }
 
     /**
