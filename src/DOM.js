@@ -1,6 +1,9 @@
 const {ROOT} = require('./constants');
 const type = require('typis');
 
+/**
+ * @class
+ */
 class DOM {
 
     static _rootExists(element) {
@@ -12,7 +15,7 @@ class DOM {
     }
 
     /**
-     * Get component by Element
+     * Get Medome component by Element
      * @param element
      * @returns {*}
      */
@@ -37,7 +40,7 @@ class DOM {
     }
 
     /**
-     * Get component by query
+     * Get Medom component by query
      * @param query
      * @returns {*}
      */
@@ -46,7 +49,7 @@ class DOM {
     }
 
     /**
-     * Get components by query
+     * Get Medom components by query
      * @param query
      * @returns {*}
      */

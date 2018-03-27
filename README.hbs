@@ -1,0 +1,31 @@
+# Medom
+Just a wrapper of HTML elements.
+<br/><br/>
+<a href="https://travis-ci.org/fabioricali/medom" target="_blank"><img src="https://travis-ci.org/fabioricali/medom.svg?branch=master" title="Build Status"/></a>
+<a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" title="License: MIT"/></a>
+
+## Installation
+```
+npm install --save medom
+```
+
+## Example
+```javascript
+const {Component} = require('medom');
+
+const myComponent = new Component('<app-my-component></app-my-component>');
+
+myComponent.dom.innerHTML = 'Hello World';
+
+myComponent.renderTo(document.body);
+```
+
+## API
+
+{{>main}}
+
+## License
+medom is open-sourced software licensed under the <a target="_blank" href="http://opensource.org/licenses/MIT">MIT license</a>
+
+## Author
+<a target="_blank" href="http://rica.li">Fabio Ricali</a>

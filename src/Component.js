@@ -3,9 +3,16 @@ const extend = require('defaulty');
 const {ROOT} = require('./constants');
 const arrayme = require('arrayme');
 
+/**
+ * @class
+ */
 class Component {
 
-    constructor(tpl, opt = {}) {
+    /**
+     * Create instance
+     * @param {string} tpl html string
+     */
+    constructor(tpl) {
         Object.defineProperty(this, 'dom', {
             value: html.create(tpl)
         });
@@ -16,8 +23,8 @@ class Component {
     }
 
     /**
-     * Add in component
-     * @param {Component | Component[]} cmp to append
+     * Append other Medom components
+     * @param {Component | Component[]} cmp component to append
      * @returns {Component}
      */
     append(cmp) {
@@ -38,9 +45,8 @@ class Component {
     /**
      * Render component to target
      * @param target
-     * @param opt
-     * @param target
-     * @param opt
+     * @param {object} [opt]
+     * @param {boolean} [opt.append=true]
      * @returns {Component}
      */
     renderTo(target, opt) {
@@ -56,8 +62,8 @@ class Component {
     }
 
     /**
-     * Check if is a component
-     * @param cmp
+     * Check if is a Medom component
+     * @param {*} cmp
      * @returns {boolean}
      */
     static isComponent(cmp) {
