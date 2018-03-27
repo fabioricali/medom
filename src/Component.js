@@ -2,7 +2,6 @@ const html = require('dohtml');
 const extend = require('defaulty');
 const {ROOT} = require('./constants');
 const arrayme = require('arrayme');
-const type = require('typis');
 
 class Component {
 
@@ -18,10 +17,10 @@ class Component {
 
     /**
      * Add in component
-     * @param {Component | Component[]} cmp to add
+     * @param {Component | Component[]} cmp to append
      * @returns {Component}
      */
-    add(cmp) {
+    append(cmp) {
 
         cmp = arrayme(cmp);
 

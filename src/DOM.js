@@ -1,4 +1,3 @@
-const dom = require('dohtml');
 const {ROOT} = require('./constants');
 const type = require('typis');
 

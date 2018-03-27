@@ -52,7 +52,7 @@ describe('Component', function () {
                 return this.dom.innerHTML;
             };
 
-            cmp.add(cmpChild);
+            cmp.append(cmpChild);
             cmpChild.setTitle();
 
             console.log(cmp);

@@ -1,5 +1,4 @@
 const {Component, DOM} = require('../');
-const dohtml = require('dohtml');
 const be = require('bejs');
 
 describe('Component', function () {
@@ -23,7 +22,7 @@ describe('Component', function () {
             const cmp = new Component('<cmp-parent></cmp-parent>');
             const cmpChild = new Component('<cmp-child></cmp-child>');
 
-            cmp.add(cmpChild);
+            cmp.append(cmpChild);
 
             const cmpChildByQuery = cmp.dom.querySelector('cmp-child');
             const result = DOM.get(cmpChildByQuery);
@@ -45,8 +44,8 @@ describe('Component', function () {
             const cmpChild1 = new Component('<cmp-element></cmp-element>');
             const cmpChild2 = new Component('<cmp-element></cmp-element>');
 
-            cmp.add(cmpChild1);
-            cmp.add(cmpChild2);
+            cmp.append(cmpChild1);
+            cmp.append(cmpChild2);
 
             cmp.renderTo(document.body);
 
@@ -64,8 +63,8 @@ describe('Component', function () {
             const cmpChild1 = new Component('<div></div>');
             const cmpChild2 = new Component('<div></div>');
 
-            cmp.add(cmpChild1);
-            cmp.add(cmpChild2);
+            cmp.append(cmpChild1);
+            cmp.append(cmpChild2);
 
             let result = DOM.getByQueryAll('div');
 
