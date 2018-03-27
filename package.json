@@ -2,13 +2,13 @@
     "name": "medom",
     "version": "0.0.2",
     "description": "Just a wrapper of HTML elements",
-    "main": "index.js",
+    "main": "dist/medom.js",
     "scripts": {
         "release:before": "npm run-script test && npm run-script doc && git commit -a -m DOC",
         "release:major": "npm run-script release:before && webpack --env.major && npm run-script release:publish",
         "release:minor": "npm run-script release:before && webpack --env.minor && npm run-script release:publish",
         "release:patch": "npm run-script release:before && webpack --env.patch && npm run-script release:publish",
-        "release:publish": "version-to-tag.sh && npm publish",
+        "release:publish": "git commit -a -m BUILD && version-to-tag.sh && npm publish",
         "build": "webpack --progress",
         "test": "mocha test",
         "doc": "jsdoc2md --template README.hbs --no-gfm --files src/Component.js src/DOM.js > README.md"
