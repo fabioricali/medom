@@ -1,3 +1,4 @@
 module.exports = {
-    ROOT: '__MEDOM__'
+    ROOT: '__MEDOM__',
+    TYPE: 'MEDOM'
 };
