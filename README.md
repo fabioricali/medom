@@ -15,9 +15,9 @@ const {Component} = require('medom');
 
 const myComponent = new Component('<app-my-component></app-my-component>');
 
-myComponent.dom.innerHTML = 'Hello World';
-
-myComponent.renderTo(document.body);
+myComponent
+    .setContent('Hello World')
+    .renderTo(document.body);
 ```
 
 ## API
