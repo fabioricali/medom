@@ -1,4 +1,4 @@
-// [AIV_SHORT]  Medom Build version: 0.1.0  
+// [AIV_SHORT]  Medom Build version: 0.1.1  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -801,15 +801,20 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 "use strict";
 
 
+if (!Array.isArray) {
+    Array.isArray = function (arg) {
+        return Object.prototype.toString.call(arg) === '[object Array]';
+    };
+}
+
 /**
  * Transforms a value into array
  * @param value {*} value to transform
  * @param [checkNull=true] {boolean} if true returns empty array
- * @returns {*}
+ * @returns [] | *
  */
-module.exports = function (value) {
-    var checkNull = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-
+module.exports = function (value, checkNull) {
+    checkNull = checkNull === undefined ? true : checkNull;
     if (checkNull && value === null || value === undefined) return [];else return Array.isArray(value) ? value : [value];
 };
 
