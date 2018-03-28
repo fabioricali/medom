@@ -1,4 +1,4 @@
-// [AIV_SHORT]  Medom Build version: 0.2.4  
+// [AIV_SHORT]  Medom Build version: 0.3.0  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();

@@ -45,6 +45,8 @@ myComponent
         * [.isVisible()](#Component+isVisible) ⇒ <code>boolean</code>
         * [.hide([opt])](#Component+hide) ⇒ [<code>Component</code>](#Component)
         * [.show([opt])](#Component+show) ⇒ [<code>Component</code>](#Component)
+        * [.setState(state)](#Component+setState) ⇒ [<code>Component</code>](#Component)
+        * [.getState()](#Component+getState) ⇒ <code>\*</code>
         * [.setContent(content)](#Component+setContent) ⇒ [<code>Component</code>](#Component)
         * [.getContent()](#Component+getContent) ⇒ <code>HTMLElement</code>
         * [.append(...cmp)](#Component+append) ⇒ [<code>Component</code>](#Component)
@@ -186,6 +188,31 @@ Show component
     </tr>  </tbody>
 </table>
 
+<a name="Component+setState"></a>
+
+### component.setState(state) ⇒ [<code>Component</code>](#Component)
+Set state
+
+**Kind**: instance method of [<code>Component</code>](#Component)  
+**Emits**: <code>Component#event:state</code>, <code>Component#event:beforeState</code>  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>state</td><td><code>*</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="Component+getState"></a>
+
+### component.getState() ⇒ <code>\*</code>
+Get current state
+
+**Kind**: instance method of [<code>Component</code>](#Component)  
 <a name="Component+setContent"></a>
 
 ### component.setContent(content) ⇒ [<code>Component</code>](#Component)
