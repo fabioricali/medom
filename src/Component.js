@@ -16,13 +16,15 @@ class Component {
     /**
      * Create instance
      * @param {string} tpl html string
-     * @param {object} [cfg]
-     * @param {string} [cfg.widget]
+     * @param {object} [cfg] configuration
+     * @param {string} [cfg.widget] widget name
+     * @param {string} [cfg.state] set initial state
      */
     constructor(tpl, cfg = {}) {
 
         this.cfg = extend.copy(cfg, {
-            widget: ''
+            widget: '',
+            state: {}
         });
 
         Object.defineProperty(this, 'dom', {
@@ -47,6 +49,8 @@ class Component {
         }
 
         this._visible = true;
+
+        this.setState(this.cfg.state);
     }
 
     /**
@@ -297,6 +301,9 @@ class Component {
         return cmp instanceof Component;
     }
 
+    /**
+     * @ignore
+     */
     static isComponentEvent(eventName) {
         return EVENTS.includes(eventName);
     }
