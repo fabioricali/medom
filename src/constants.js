@@ -4,6 +4,8 @@ module.exports = {
         'show',
         'hide',
         'beforeContentChange',
-        'contentChange'
+        'contentChange',
+        'state',
+        'beforeState'
     ]
 };
