@@ -4,7 +4,7 @@ const {ROOT,EVENTS} = require('./constants');
 const Flak = require('flak');
 const DOM = require('./DOM');
 
-const DATA_WIDGET = 'data-medom-alias';
+const DATA_WIDGET = 'data-medom-widget';
 
 /**
  * @class
