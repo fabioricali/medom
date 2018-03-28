@@ -10,7 +10,7 @@
         "release:patch": "npm run-script release:before && webpack --env.patch && npm run-script release:publish",
         "release:publish": "echo git commit -a -m BUILD && version-to-tag.sh && npm publish",
         "build": "webpack --progress",
-        "test": "mocha test",
+        "test": "npm run-script build && mocha test",
         "doc": "jsdoc2md --template README.hbs --no-gfm --files src/Component.js src/DOM.js > README.md"
     },
     "repository": {
@@ -32,11 +32,13 @@
     "homepage": "https://github.com/fabioricali/medom#readme",
     "dependencies": {
         "arrayme": "^1.0.3",
+        "deep-copy": "^1.4.2",
         "defaulty": "^2.1.0",
         "dohtml": "0.0.13",
+        "fast-deep-equal": "^1.1.0",
         "flak": "^1.0.0",
-        "typis": "^1.1.1",
-        "mocha-is-running": "^1.0.6"
+        "mocha-is-running": "^1.0.6",
+        "typis": "^1.1.1"
     },
     "devDependencies": {
         "babel-core": "^6.26.0",

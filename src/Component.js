@@ -1,8 +1,10 @@
 const html = require('dohtml');
 const extend = require('defaulty');
-const {ROOT,EVENTS} = require('./constants');
+const {ROOT, EVENTS} = require('./constants');
 const Flak = require('flak');
 const DOM = require('./DOM');
+const equal = require('fast-deep-equal');
+const copy = require('deep-copy');
 
 const DATA_WIDGET = 'data-medom-widget';
 
@@ -20,11 +22,15 @@ class Component {
     constructor(tpl, cfg = {}) {
 
         this.cfg = extend.copy(cfg, {
-           widget: ''
+            widget: ''
         });
 
         Object.defineProperty(this, 'dom', {
             value: html.create(tpl)
+        });
+
+        Object.defineProperty(this, 'state', {
+            value: null
         });
 
         Object.defineProperty(this.dom, ROOT, {
@@ -35,7 +41,7 @@ class Component {
             value: new Flak()
         });
 
-        if(this.cfg.widget) {
+        if (this.cfg.widget) {
             this.dom.setAttribute(DATA_WIDGET, this.cfg.widget);
         }
 
@@ -124,6 +130,34 @@ class Component {
         this.emitter.fire('show', this);
 
         return this;
+    }
+
+    /**
+     * Set state
+     * @param {*} state
+     * @returns {Component}
+     * @fires Component#state
+     * @fires Component#beforeState
+     */
+    setState(state) {
+        if (!equal(state, this.state)) {
+            const prevState = copy(this.state);
+            const newState = copy(state);
+
+            if (this.emitter.fireTheFirst('beforeState', newState, prevState, this) === false) return this;
+
+            this.state = newState;
+            this.emitter.fire('state', this.state, prevState, this);
+        }
+        return this;
+    }
+
+    /**
+     * Get current state
+     * @returns {*}
+     */
+    getState() {
+        return this.state;
     }
 
     /**
@@ -271,7 +305,7 @@ class Component {
      * @event Component#beforeContentChange
      * @param {HTMLElement} candidate content
      * @param {HTMLElement} old content
-     * @param {Component}
+     * @param {Component} me
      */
 
     /**
@@ -279,19 +313,35 @@ class Component {
      * @event Component#contentChange
      * @param {HTMLElement} current content
      * @param {HTMLElement} old content
-     * @param {Component}
+     * @param {Component} me
      */
 
     /**
      * Triggered when component is show
      * @event Component#show
-     * @param {Component}
+     * @param {Component} me
      */
 
     /**
      * Triggered when component is hidden
      * @event Component#hide
-     * @param {Component}
+     * @param {Component} me
+     */
+
+    /**
+     * Triggered before change state
+     * @event Component#beforeState
+     * @param {*} newState
+     * @param {*} prevState
+     * @param {Component} me
+     */
+
+    /**
+     * Triggered when component change state
+     * @event Component#state
+     * @param {*} state
+     * @param {*} prevState
+     * @param {Component} me
      */
 
 }
