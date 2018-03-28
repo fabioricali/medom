@@ -37,8 +37,11 @@ myComponent.renderTo(document.body);
 **Kind**: global class  
 
 * [Component](#Component)
-    * [new Component(tpl)](#new_Component_new)
+    * [new Component(tpl, [cfg])](#new_Component_new)
     * _instance_
+        * [.getWidget(widget)](#Component+getWidget) ⇒ [<code>Component</code>](#Component) \| <code>undefined</code>
+        * [.get(query)](#Component+get) ⇒ [<code>Component</code>](#Component) \| <code>undefined</code>
+        * [.getAll(query)](#Component+getAll) ⇒ <code>array</code>
         * [.isVisible()](#Component+isVisible) ⇒ <code>boolean</code>
         * [.hide([opt])](#Component+hide) ⇒ [<code>Component</code>](#Component)
         * [.show([opt])](#Component+show) ⇒ [<code>Component</code>](#Component)
@@ -56,7 +59,7 @@ myComponent.renderTo(document.body);
 
 <a name="new_Component_new"></a>
 
-### new Component(tpl)
+### new Component(tpl, [cfg])
 Create instance
 
 <table>
@@ -68,6 +71,67 @@ Create instance
   <tbody>
 <tr>
     <td>tpl</td><td><code>string</code></td><td><p>html string</p>
+</td>
+    </tr><tr>
+    <td>[cfg]</td><td><code>object</code></td><td></td>
+    </tr><tr>
+    <td>[cfg.widget]</td><td><code>string</code></td><td></td>
+    </tr>  </tbody>
+</table>
+
+<a name="Component+getWidget"></a>
+
+### component.getWidget(widget) ⇒ [<code>Component</code>](#Component) \| <code>undefined</code>
+Get component by widget name
+
+**Kind**: instance method of [<code>Component</code>](#Component)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>widget</td><td><code>string</code></td><td><p>name</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+<a name="Component+get"></a>
+
+### component.get(query) ⇒ [<code>Component</code>](#Component) \| <code>undefined</code>
+Get component by query
+
+**Kind**: instance method of [<code>Component</code>](#Component)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>query</td><td><code>string</code></td><td><p>selector</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+<a name="Component+getAll"></a>
+
+### component.getAll(query) ⇒ <code>array</code>
+Get all components by query
+
+**Kind**: instance method of [<code>Component</code>](#Component)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>query</td><td><code>string</code></td><td><p>selector</p>
 </td>
     </tr>  </tbody>
 </table>
@@ -286,8 +350,8 @@ Check if is a Medom component
 
 * [DOM](#DOM)
     * [.get(element)](#DOM.get) ⇒ <code>\*</code>
-    * [.getByQuery(query)](#DOM.getByQuery) ⇒ <code>\*</code>
-    * [.getByQueryAll(query)](#DOM.getByQueryAll) ⇒ <code>\*</code>
+    * [.getByQuery(query, [ctx])](#DOM.getByQuery) ⇒ <code>\*</code>
+    * [.getByQueryAll(query, [ctx])](#DOM.getByQueryAll) ⇒ <code>\*</code>
 
 <a name="DOM.get"></a>
 
@@ -309,37 +373,41 @@ Get Medome component by Element
 
 <a name="DOM.getByQuery"></a>
 
-### DOM.getByQuery(query) ⇒ <code>\*</code>
+### DOM.getByQuery(query, [ctx]) ⇒ <code>\*</code>
 Get Medom component by query
 
 **Kind**: static method of [<code>DOM</code>](#DOM)  
 <table>
   <thead>
     <tr>
-      <th>Param</th>
+      <th>Param</th><th>Default</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>query</td>
+    <td>query</td><td></td>
+    </tr><tr>
+    <td>[ctx]</td><td><code>document</code></td>
     </tr>  </tbody>
 </table>
 
 <a name="DOM.getByQueryAll"></a>
 
-### DOM.getByQueryAll(query) ⇒ <code>\*</code>
+### DOM.getByQueryAll(query, [ctx]) ⇒ <code>\*</code>
 Get Medom components by query
 
 **Kind**: static method of [<code>DOM</code>](#DOM)  
 <table>
   <thead>
     <tr>
-      <th>Param</th>
+      <th>Param</th><th>Default</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>query</td>
+    <td>query</td><td></td>
+    </tr><tr>
+    <td>[ctx]</td><td><code>document</code></td>
     </tr>  </tbody>
 </table>
 
