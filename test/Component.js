@@ -67,6 +67,35 @@ describe('Component', function () {
         });
     });
 
+    describe('hide', function () {
+        it('should be hidden', function () {
+            const cmp = new Component('<div id="test"></div>');
+            console.log(cmp);
+            be.err.true(cmp.isVisible());
+            cmp.hide();
+            be.err.false(cmp.isVisible());
+        });
+    });
+
+    describe('show', function () {
+        it('should be visible', function () {
+            const cmp = new Component('<div id="test"></div>');
+            console.log(cmp);
+            cmp.hide();
+            be.err.false(cmp.isVisible());
+            cmp.show();
+            be.err.true(cmp.isVisible());
+        });
+    });
+
+    describe('setContent', function () {
+        it('should be changed', function () {
+            const cmp = new Component('<div id="test"></div>');
+            cmp.setContent('hello');
+            be.err.equal('hello', cmp.getContent());
+        });
+    });
+
     describe('isComponent', function () {
         it('should be true', function () {
             const cmp = new Component('<cmp-parent></cmp-parent>');
