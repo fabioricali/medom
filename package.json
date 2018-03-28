@@ -31,7 +31,7 @@
     },
     "homepage": "https://github.com/fabioricali/medom#readme",
     "dependencies": {
-        "arrayme": "^1.0.2",
+        "arrayme": "^1.0.3",
         "defaulty": "^2.1.0",
         "dohtml": "0.0.13",
         "flak": "^1.0.0",
