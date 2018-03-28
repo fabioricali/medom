@@ -30,7 +30,8 @@ class Component {
         });
 
         Object.defineProperty(this, 'state', {
-            value: null
+            value: null,
+            writable: true
         });
 
         Object.defineProperty(this.dom, ROOT, {

@@ -113,7 +113,7 @@ module.exports = function (module) {
 
 module.exports = {
     ROOT: '__MEDOM__',
-    EVENTS: ['show', 'hide', 'beforeContentChange', 'contentChange']
+    EVENTS: ['show', 'hide', 'beforeContentChange', 'contentChange', 'state', 'beforeState']
 };
 
 /***/ }),
@@ -259,6 +259,8 @@ var _require = __webpack_require__(1),
 
 var Flak = __webpack_require__(9);
 var DOM = __webpack_require__(2);
+var equal = __webpack_require__(11);
+var copy = __webpack_require__(12);
 
 var DATA_WIDGET = 'data-medom-widget';
 
@@ -285,6 +287,11 @@ var Component = function () {
 
         Object.defineProperty(this, 'dom', {
             value: html.create(tpl)
+        });
+
+        Object.defineProperty(this, 'state', {
+            value: null,
+            writable: true
         });
 
         Object.defineProperty(this.dom, ROOT, {
@@ -407,6 +414,40 @@ var Component = function () {
             this.emitter.fire('show', this);
 
             return this;
+        }
+
+        /**
+         * Set state
+         * @param {*} state
+         * @returns {Component}
+         * @fires Component#state
+         * @fires Component#beforeState
+         */
+
+    }, {
+        key: 'setState',
+        value: function setState(state) {
+            if (!equal(state, this.state)) {
+                var prevState = copy(this.state);
+                var newState = copy(state);
+
+                if (this.emitter.fireTheFirst('beforeState', newState, prevState, this) === false) return this;
+
+                this.state = newState;
+                this.emitter.fire('state', this.state, prevState, this);
+            }
+            return this;
+        }
+
+        /**
+         * Get current state
+         * @returns {*}
+         */
+
+    }, {
+        key: 'getState',
+        value: function getState() {
+            return this.state;
         }
 
         /**
@@ -591,7 +632,7 @@ var Component = function () {
          * @event Component#beforeContentChange
          * @param {HTMLElement} candidate content
          * @param {HTMLElement} old content
-         * @param {Component}
+         * @param {Component} me
          */
 
         /**
@@ -599,19 +640,35 @@ var Component = function () {
          * @event Component#contentChange
          * @param {HTMLElement} current content
          * @param {HTMLElement} old content
-         * @param {Component}
+         * @param {Component} me
          */
 
         /**
          * Triggered when component is show
          * @event Component#show
-         * @param {Component}
+         * @param {Component} me
          */
 
         /**
          * Triggered when component is hidden
          * @event Component#hide
-         * @param {Component}
+         * @param {Component} me
+         */
+
+        /**
+         * Triggered before change state
+         * @event Component#beforeState
+         * @param {*} newState
+         * @param {*} prevState
+         * @param {Component} me
+         */
+
+        /**
+         * Triggered when component change state
+         * @event Component#state
+         * @param {*} state
+         * @param {*} prevState
+         * @param {Component} me
          */
 
     }]);
@@ -1798,6 +1855,151 @@ var Typis = {
 };
 
 module.exports = Typis;
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var isArray = Array.isArray;
+var keyList = Object.keys;
+var hasProp = Object.prototype.hasOwnProperty;
+
+module.exports = function equal(a, b) {
+  if (a === b) return true;
+
+  var arrA = isArray(a),
+      arrB = isArray(b),
+      i,
+      length,
+      key;
+
+  if (arrA && arrB) {
+    length = a.length;
+    if (length != b.length) return false;
+    for (i = 0; i < length; i++) {
+      if (!equal(a[i], b[i])) return false;
+    }return true;
+  }
+
+  if (arrA != arrB) return false;
+
+  var dateA = a instanceof Date,
+      dateB = b instanceof Date;
+  if (dateA != dateB) return false;
+  if (dateA && dateB) return a.getTime() == b.getTime();
+
+  var regexpA = a instanceof RegExp,
+      regexpB = b instanceof RegExp;
+  if (regexpA != regexpB) return false;
+  if (regexpA && regexpB) return a.toString() == b.toString();
+
+  if (a instanceof Object && b instanceof Object) {
+    var keys = keyList(a);
+    length = keys.length;
+
+    if (length !== keyList(b).length) return false;
+
+    for (i = 0; i < length; i++) {
+      if (!hasProp.call(b, keys[i])) return false;
+    }for (i = 0; i < length; i++) {
+      key = keys[i];
+      if (!equal(a[key], b[key])) return false;
+    }
+
+    return true;
+  }
+
+  return false;
+};
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+;(function (name, root, factory) {
+  if (( false ? 'undefined' : _typeof(exports)) === 'object') {
+    module.exports = factory();
+  }
+  /* istanbul ignore next */
+  else if (true) {
+      !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+				__WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    } else {
+      root[name] = factory();
+    }
+})('dcopy', undefined, function () {
+  /**
+   * Deep copy objects and arrays
+   *
+   * @param {Object/Array} target
+   * @return {Object/Array} copy
+   * @api public
+   */
+
+  return function (target) {
+    if (/number|string|boolean/.test(typeof target === 'undefined' ? 'undefined' : _typeof(target))) {
+      return target;
+    }
+    if (target instanceof Date) {
+      return new Date(target.getTime());
+    }
+
+    var copy = target instanceof Array ? [] : {};
+    walk(target, copy);
+    return copy;
+
+    function walk(target, copy) {
+      for (var key in target) {
+        var obj = target[key];
+        if (obj instanceof Date) {
+          var value = new Date(obj.getTime());
+          add(copy, key, value);
+        } else if (obj instanceof Function) {
+          var value = obj;
+          add(copy, key, value);
+        } else if (obj instanceof Array) {
+          var value = [];
+          var last = add(copy, key, value);
+          walk(obj, last);
+        } else if (obj instanceof Object) {
+          var value = {};
+          var last = add(copy, key, value);
+          walk(obj, last);
+        } else {
+          var value = obj;
+          add(copy, key, value);
+        }
+      }
+    }
+  };
+
+  /**
+   * Adds a value to the copy object based on its type
+   *
+   * @api private
+   */
+
+  function add(copy, key, value) {
+    if (copy instanceof Array) {
+      copy.push(value);
+      return copy[copy.length - 1];
+    } else if (copy instanceof Object) {
+      copy[key] = value;
+      return copy[key];
+    }
+  }
+});
 
 /***/ })
 /******/ ]);

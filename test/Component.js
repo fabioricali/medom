@@ -124,6 +124,32 @@ describe('Component', function () {
         });
     });
 
+    describe('setState', function () {
+        it('should be new state', function (done) {
+            const cmp = new Component('<div></div>');
+            cmp.on('state', function (state, prevState) {
+                console.log(state, prevState);
+                be.err.object(prevState);
+                be.err.empty(prevState);
+                be.err(done).equal('hello', state);
+            });
+            cmp.setState('hello');
+        });
+    });
+
+    describe('getState', function () {
+        it('should be new state', function (done) {
+            const cmp = new Component('<div></div>');
+            cmp.on('state', function (state, prevState, me) {
+                console.log(state, prevState);
+                be.err.object(prevState);
+                be.err.empty(prevState);
+                be.err(done).equal('hello', me.getState());
+            });
+            cmp.setState('hello');
+        });
+    });
+
     describe('isComponent', function () {
         it('should be true', function () {
             const cmp = new Component('<cmp-parent></cmp-parent>');
