@@ -296,18 +296,20 @@ var Component = function () {
 
         /**
          * Append other Medom components
-         * @param {Component | Component[]} cmp component to append
+         * @param {...Component} cmp component to append
          * @returns {Component}
          * @fires Component#contentChange
          */
 
     }, {
         key: 'append',
-        value: function append(cmp) {
-
-            cmp = arrayme(cmp);
+        value: function append() {
 
             var items = [];
+
+            for (var _len = arguments.length, cmp = Array(_len), _key = 0; _key < _len; _key++) {
+                cmp[_key] = arguments[_key];
+            }
 
             cmp.forEach(function (item) {
                 if (Component.isComponent(item)) items.push(item.dom);
@@ -370,8 +372,8 @@ var Component = function () {
     }, {
         key: 'suspendEvent',
         value: function suspendEvent() {
-            for (var _len = arguments.length, eventName = Array(_len), _key = 0; _key < _len; _key++) {
-                eventName[_key] = arguments[_key];
+            for (var _len2 = arguments.length, eventName = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                eventName[_key2] = arguments[_key2];
             }
 
             this.emitter.suspendEvent.call(this.emitter, eventName);
@@ -387,8 +389,8 @@ var Component = function () {
     }, {
         key: 'resumeEvent',
         value: function resumeEvent() {
-            for (var _len2 = arguments.length, eventName = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-                eventName[_key2] = arguments[_key2];
+            for (var _len3 = arguments.length, eventName = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+                eventName[_key3] = arguments[_key3];
             }
 
             this.emitter.resumeEvent.call(this.emitter, eventName);

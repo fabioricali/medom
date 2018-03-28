@@ -42,19 +42,21 @@ class DOM {
     /**
      * Get Medom component by query
      * @param query
+     * @param [ctx=document]
      * @returns {*}
      */
-    static getByQuery(query) {
-        return DOM.get(document.querySelector(query));
+    static getByQuery(query, ctx = document) {
+        return DOM.get(ctx.querySelector(query));
     }
 
     /**
      * Get Medom components by query
      * @param query
+     * @param [ctx=document]
      * @returns {*}
      */
-    static getByQueryAll(query) {
-        return DOM.get(document.querySelectorAll(query));
+    static getByQueryAll(query, ctx = document) {
+        return DOM.get(ctx.querySelectorAll(query));
     }
 }
 

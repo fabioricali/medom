@@ -44,7 +44,7 @@ myComponent.renderTo(document.body);
         * [.show([opt])](#Component+show) ⇒ [<code>Component</code>](#Component)
         * [.setContent(content)](#Component+setContent) ⇒ [<code>Component</code>](#Component)
         * [.getContent()](#Component+getContent) ⇒ <code>HTMLElement</code>
-        * [.append(cmp)](#Component+append) ⇒ [<code>Component</code>](#Component)
+        * [.append(...cmp)](#Component+append) ⇒ [<code>Component</code>](#Component)
         * [.renderTo(target, [opt])](#Component+renderTo) ⇒ [<code>Component</code>](#Component)
         * [.on(eventName, callback)](#Component+on) ⇒ [<code>Component</code>](#Component)
         * [.suspendEvent(...eventName)](#Component+suspendEvent) ⇒ [<code>Component</code>](#Component)
@@ -149,7 +149,7 @@ Get content
 **Kind**: instance method of [<code>Component</code>](#Component)  
 <a name="Component+append"></a>
 
-### component.append(cmp) ⇒ [<code>Component</code>](#Component)
+### component.append(...cmp) ⇒ [<code>Component</code>](#Component)
 Append other Medom components
 
 **Kind**: instance method of [<code>Component</code>](#Component)  
@@ -162,7 +162,7 @@ Append other Medom components
   </thead>
   <tbody>
 <tr>
-    <td>cmp</td><td><code><a href="#Component">Component</a></code> | <code><a href="#Component">Array.&lt;Component&gt;</a></code></td><td><p>component to append</p>
+    <td>...cmp</td><td><code><a href="#Component">Component</a></code></td><td><p>component to append</p>
 </td>
     </tr>  </tbody>
 </table>

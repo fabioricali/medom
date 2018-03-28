@@ -2,7 +2,7 @@
     "name": "medom",
     "version": "0.1.1",
     "description": "Just a wrapper of HTML elements",
-    "main": "dist/medom.js",
+    "main": "index.js",
     "scripts": {
         "release:before": "npm run-script test && npm run-script doc && echo git commit -a -m DOC",
         "release:major": "npm run-script release:before && webpack --env.major && npm run-script release:publish",
@@ -10,7 +10,7 @@
         "release:patch": "npm run-script release:before && webpack --env.patch && npm run-script release:publish",
         "release:publish": "echo git commit -a -m BUILD && version-to-tag.sh && npm publish",
         "build": "webpack --progress",
-        "test": "npm run-script build && mocha test",
+        "test": "mocha test",
         "doc": "jsdoc2md --template README.hbs --no-gfm --files src/Component.js src/DOM.js > README.md"
     },
     "repository": {
@@ -46,6 +46,7 @@
         "jsdom": "^11.6.2",
         "jsdom-global": "^3.0.2",
         "mocha": "^5.0.4",
+        "mocha-is-running": "^1.0.6",
         "unminified-webpack-plugin": "^1.4.2",
         "webpack": "^3.10.0",
         "webpack-auto-inject-version": "^1.0.0"

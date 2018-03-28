@@ -39,6 +39,34 @@ describe('Component', function () {
         });
     });
 
+    describe('append', function () {
+        it('should not be null', function () {
+            const cmp = new Component('<cmp-parent></cmp-parent>');
+            const cmpChild1 = new Component('<cmp-child></cmp-child>');
+            const cmpChild2 = new Component('<cmp-child></cmp-child>');
+
+            cmp.append(cmpChild1, cmpChild2);
+
+            be.err.object(cmp.get('cmp-child'));
+
+            console.log(cmp.getContent())
+        });
+    });
+
+    describe('get', function () {
+        it('should not be null', function () {
+            const cmp = new Component('<cmp-parent></cmp-parent>');
+            const cmpChild1 = new Component('<cmp-child></cmp-child>', {widget: 'MyComponent'});
+            const cmpChild2 = new Component('<cmp-child></cmp-child>');
+
+            cmp.append(cmpChild1, cmpChild2);
+
+            console.log(cmp.getContent());
+
+            be.err.object(cmp.getWidget('MyComponent'));
+        });
+    });
+
     describe('renderTo', function () {
         it('should not be null', function () {
             const cmp = new Component('<cmp-parent></cmp-parent>');

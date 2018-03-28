@@ -1,8 +1,10 @@
 const html = require('dohtml');
 const extend = require('defaulty');
 const {ROOT,EVENTS} = require('./constants');
-const arrayme = require('arrayme');
 const Flak = require('flak');
+const DOM = require('./DOM');
+
+const DATA_WIDGET = 'data-medom-alias';
 
 /**
  * @class
@@ -12,8 +14,15 @@ class Component {
     /**
      * Create instance
      * @param {string} tpl html string
+     * @param {object} [cfg]
+     * @param {string} [cfg.alias]
      */
-    constructor(tpl) {
+    constructor(tpl, cfg = {}) {
+
+        this.cfg = extend.copy(cfg, {
+           widget: ''
+        });
+
         Object.defineProperty(this, 'dom', {
             value: html.create(tpl)
         });
@@ -26,7 +35,38 @@ class Component {
             value: new Flak()
         });
 
+        if(this.cfg.widget) {
+            this.dom.setAttribute(DATA_WIDGET, this.cfg.widget);
+        }
+
         this._visible = true;
+    }
+
+    /**
+     * Get component by widget name
+     * @param {string} widget name
+     * @returns {Component|undefined}
+     */
+    getWidget(widget) {
+        return DOM.getByQuery(`[${DATA_WIDGET}="${widget}"]`, this.dom);
+    }
+
+    /**
+     * Get component by query
+     * @param {string} query selector
+     * @returns {Component|undefined}
+     */
+    get(query) {
+        return DOM.getByQuery(query, this.dom);
+    }
+
+    /**
+     * Get all components by query
+     * @param {string} query selector
+     * @returns {array}
+     */
+    getAll(query) {
+        return DOM.getByQueryAll(query, this.dom);
     }
 
     /**
@@ -116,13 +156,11 @@ class Component {
 
     /**
      * Append other Medom components
-     * @param {Component | Component[]} cmp component to append
+     * @param {...Component} cmp component to append
      * @returns {Component}
      * @fires Component#contentChange
      */
-    append(cmp) {
-
-        cmp = arrayme(cmp);
+    append(...cmp) {
 
         let items = [];
 
