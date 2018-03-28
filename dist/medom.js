@@ -1,4 +1,4 @@
-// [AIV_SHORT]  Medom Build version: 0.0.4  
+// [AIV_SHORT]  Medom Build version: 0.1.0  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -112,7 +112,8 @@ module.exports = function (module) {
 
 
 module.exports = {
-    ROOT: '__MEDOM__'
+    ROOT: '__MEDOM__',
+    EVENTS: ['show', 'hide', 'beforeContentChange', 'contentChange']
 };
 
 /***/ }),
@@ -155,12 +156,11 @@ var html = __webpack_require__(5);
 var extend = __webpack_require__(7);
 
 var _require = __webpack_require__(1),
-    ROOT = _require.ROOT;
+    ROOT = _require.ROOT,
+    EVENTS = _require.EVENTS;
 
 var arrayme = __webpack_require__(8);
 var Flak = __webpack_require__(9);
-
-var EVENTS = ['show', 'hide', 'beforeContentChange', 'contentChange'];
 
 /**
  * @class
@@ -274,7 +274,7 @@ var Component = function () {
         value: function setContent(content) {
             if (content) {
                 var old = this.dom.innerHTML;
-                console.log(this.emitter.fireTheFirst('beforeContentChange', content, old, this));
+
                 if (this.emitter.fireTheFirst('beforeContentChange', content, old, this) === false) return this;
 
                 this.dom.innerHTML = content;

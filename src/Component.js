@@ -1,15 +1,8 @@
 const html = require('dohtml');
 const extend = require('defaulty');
-const {ROOT} = require('./constants');
+const {ROOT,EVENTS} = require('./constants');
 const arrayme = require('arrayme');
 const Flak = require('flak');
-
-const EVENTS = [
-    'show',
-    'hide',
-    'beforeContentChange',
-    'contentChange'
-];
 
 /**
  * @class

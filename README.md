@@ -39,8 +39,18 @@ myComponent.renderTo(document.body);
 * [Component](#Component)
     * [new Component(tpl)](#new_Component_new)
     * _instance_
+        * [.isVisible()](#Component+isVisible) ⇒ <code>boolean</code>
+        * [.hide([opt])](#Component+hide) ⇒ [<code>Component</code>](#Component)
+        * [.show([opt])](#Component+show) ⇒ [<code>Component</code>](#Component)
+        * [.setContent(content)](#Component+setContent) ⇒ [<code>Component</code>](#Component)
+        * [.getContent()](#Component+getContent) ⇒ <code>HTMLElement</code>
         * [.append(cmp)](#Component+append) ⇒ [<code>Component</code>](#Component)
         * [.renderTo(target, [opt])](#Component+renderTo) ⇒ [<code>Component</code>](#Component)
+        * [.on(eventName, callback)](#Component+on) ⇒ [<code>Component</code>](#Component)
+        * [.suspendEvent(...eventName)](#Component+suspendEvent) ⇒ [<code>Component</code>](#Component)
+        * [.resumeEvent(...eventName)](#Component+resumeEvent) ⇒ [<code>Component</code>](#Component)
+        * [.suspendEvents()](#Component+suspendEvents) ⇒ [<code>Component</code>](#Component)
+        * [.resumeEvents()](#Component+resumeEvents) ⇒ [<code>Component</code>](#Component)
     * _static_
         * [.isComponent(cmp)](#Component.isComponent) ⇒ <code>boolean</code>
 
@@ -62,12 +72,88 @@ Create instance
     </tr>  </tbody>
 </table>
 
+<a name="Component+isVisible"></a>
+
+### component.isVisible() ⇒ <code>boolean</code>
+Check if component is visibile
+
+**Kind**: instance method of [<code>Component</code>](#Component)  
+<a name="Component+hide"></a>
+
+### component.hide([opt]) ⇒ [<code>Component</code>](#Component)
+Hide component
+
+**Kind**: instance method of [<code>Component</code>](#Component)  
+**Emits**: <code>Component#event:hide</code>  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>[opt]</td><td><code>object</code></td><td></td>
+    </tr><tr>
+    <td>[opt.type]</td><td><code>string</code></td><td><code>&quot;display&quot;</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="Component+show"></a>
+
+### component.show([opt]) ⇒ [<code>Component</code>](#Component)
+Show component
+
+**Kind**: instance method of [<code>Component</code>](#Component)  
+**Emits**: <code>Component#event:show</code>  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>[opt]</td><td><code>object</code></td><td></td>
+    </tr><tr>
+    <td>[opt.type]</td><td><code>string</code></td><td><code>&quot;display&quot;</code></td>
+    </tr><tr>
+    <td>[opt.showType]</td><td><code>string</code></td><td><code>&quot;block&quot;</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="Component+setContent"></a>
+
+### component.setContent(content) ⇒ [<code>Component</code>](#Component)
+Update content
+
+**Kind**: instance method of [<code>Component</code>](#Component)  
+**Emits**: <code>Component#event:beforeContentChange</code>, <code>Component#event:contentChange</code>  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>content</td>
+    </tr>  </tbody>
+</table>
+
+<a name="Component+getContent"></a>
+
+### component.getContent() ⇒ <code>HTMLElement</code>
+Get content
+
+**Kind**: instance method of [<code>Component</code>](#Component)  
 <a name="Component+append"></a>
 
 ### component.append(cmp) ⇒ [<code>Component</code>](#Component)
 Append other Medom components
 
 **Kind**: instance method of [<code>Component</code>](#Component)  
+**Emits**: <code>Component#event:contentChange</code>  
 <table>
   <thead>
     <tr>
@@ -103,6 +189,78 @@ Render component to target
     </tr>  </tbody>
 </table>
 
+<a name="Component+on"></a>
+
+### component.on(eventName, callback) ⇒ [<code>Component</code>](#Component)
+Adds listener to instance
+
+**Kind**: instance method of [<code>Component</code>](#Component)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>eventName</td><td><code>string</code></td><td><p>event name</p>
+</td>
+    </tr><tr>
+    <td>callback</td><td><code>function</code></td><td><p>callback</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+<a name="Component+suspendEvent"></a>
+
+### component.suspendEvent(...eventName) ⇒ [<code>Component</code>](#Component)
+Suspends firing of the named event(s), works only with native component event.
+
+**Kind**: instance method of [<code>Component</code>](#Component)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>...eventName</td><td><code>string</code></td><td><p>multiple event names to suspend</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+<a name="Component+resumeEvent"></a>
+
+### component.resumeEvent(...eventName) ⇒ [<code>Component</code>](#Component)
+Resumes firing of the named event(s), works only with native component event.
+
+**Kind**: instance method of [<code>Component</code>](#Component)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>...eventName</td><td><code>string</code></td><td><p>multiple event names to resume.</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+<a name="Component+suspendEvents"></a>
+
+### component.suspendEvents() ⇒ [<code>Component</code>](#Component)
+Suspends all events, works only with native component event.
+
+**Kind**: instance method of [<code>Component</code>](#Component)  
+<a name="Component+resumeEvents"></a>
+
+### component.resumeEvents() ⇒ [<code>Component</code>](#Component)
+Resume all events, works only with native component event.
+
+**Kind**: instance method of [<code>Component</code>](#Component)  
 <a name="Component.isComponent"></a>
 
 ### Component.isComponent(cmp) ⇒ <code>boolean</code>
