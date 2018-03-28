@@ -15,7 +15,7 @@ class Component {
      * Create instance
      * @param {string} tpl html string
      * @param {object} [cfg]
-     * @param {string} [cfg.alias]
+     * @param {string} [cfg.widget]
      */
     constructor(tpl, cfg = {}) {
 
