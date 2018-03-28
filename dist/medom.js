@@ -1,4 +1,4 @@
-// [AIV_SHORT]  Medom Build version: 0.3.0  
+// [AIV_SHORT]  Medom Build version: 0.3.1  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -273,8 +273,9 @@ var Component = function () {
     /**
      * Create instance
      * @param {string} tpl html string
-     * @param {object} [cfg]
-     * @param {string} [cfg.widget]
+     * @param {object} [cfg] configuration
+     * @param {string} [cfg.widget] widget name
+     * @param {string} [cfg.state] set initial state
      */
     function Component(tpl) {
         var cfg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -282,7 +283,8 @@ var Component = function () {
         _classCallCheck(this, Component);
 
         this.cfg = extend.copy(cfg, {
-            widget: ''
+            widget: '',
+            state: {}
         });
 
         Object.defineProperty(this, 'dom', {
@@ -307,6 +309,8 @@ var Component = function () {
         }
 
         this._visible = true;
+
+        this.setState(this.cfg.state);
     }
 
     /**
@@ -621,6 +625,11 @@ var Component = function () {
         value: function isComponent(cmp) {
             return cmp instanceof Component;
         }
+
+        /**
+         * @ignore
+         */
+
     }, {
         key: 'isComponentEvent',
         value: function isComponentEvent(eventName) {

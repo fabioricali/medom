@@ -1,6 +1,6 @@
 {
     "name": "medom",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "description": "Just a wrapper of HTML elements",
     "main": "dist/medom.js",
     "scripts": {

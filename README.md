@@ -75,9 +75,14 @@ Create instance
     <td>tpl</td><td><code>string</code></td><td><p>html string</p>
 </td>
     </tr><tr>
-    <td>[cfg]</td><td><code>object</code></td><td></td>
+    <td>[cfg]</td><td><code>object</code></td><td><p>configuration</p>
+</td>
     </tr><tr>
-    <td>[cfg.widget]</td><td><code>string</code></td><td></td>
+    <td>[cfg.widget]</td><td><code>string</code></td><td><p>widget name</p>
+</td>
+    </tr><tr>
+    <td>[cfg.state]</td><td><code>string</code></td><td><p>set initial state</p>
+</td>
     </tr>  </tbody>
 </table>
 
