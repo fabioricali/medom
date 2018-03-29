@@ -159,46 +159,42 @@ describe('Component', function () {
             const regexText = /{:(.*?)}/g;
 
             cmp.dom.innerHTML = cmp.dom.innerHTML.replace(regexText, function replacer(match){
-                return '<medom-text-node value='+match+'/>';
+                return '<medom-text-node value='+match+'></medom-text-node>';
             } );
 
             const props = {};
+            const textNodes = [];
 
             function walkDOM(n) {
                 do {
                     if (n.nodeType === 1) {
-                        console.log(n.nodeName);
                         Array.from(n.attributes).forEach(attribute => {
                             const key = attribute.value.match(regexAttr);
                             if (key) {
                                 const name = key[1];
-                                if (props.hasOwnProperty(name)) {
-                                    props[name].push(attribute);
+                                let component;
+
+                                if (n.nodeName === 'MEDOM-TEXT-NODE') {
+                                    component = document.createTextNode('');
+                                    textNodes.push({
+                                        old: n,
+                                        new: component
+                                    });
                                 } else {
-                                    props[name] = [attribute];
+                                    component = attribute;
+                                }
+
+                                if (props.hasOwnProperty(name)) {
+                                    props[name].push(component);
+                                } else {
+                                    props[name] = [component];
                                 }
                             }
                         });
 
-                    } else if (n.nodeType === 3) {
-                        /*n.__MEDOM__TEXT__NODE = true;
-                        let match;
-                        const tempAttr = [];
-                        while (match = regexText.exec(n.nodeValue)) {
-                            const name = match[1];
-                            const attribute = document.createTextNode('');
-                            if (props.hasOwnProperty(name)) {
-                                props[name].push(attribute);
-                            } else {
-                                props[name] = [attribute];
-                            }
-                        }*/
-
-                        //n.nodeValue = '<medom-text-node></medom-text-node>';
-
                     }
 
-                    if (n.hasChildNodes() && !n.firstChild.__MEDOM__TEXT__NODE) {
+                    if (n.hasChildNodes()) {
                         walkDOM(n.firstChild)
                     }
 
@@ -208,21 +204,19 @@ describe('Component', function () {
             walkDOM(cmp.dom);
 
             console.log(props);
+
             console.log(cmp.getContent());
 
-            /*console.log(cmp.getContent());
-            const text = document.createTextNode('hello');
-            cmp.append(text);
-            cmp.dom.replaceChild(document.createTextNode('hhhhhhhhhhh'), text);
-            console.log(cmp.getContent());
-            text.nodeValue = 'cambia?';
+            textNodes.forEach(item => {
+                item.old.parentNode.replaceChild(item.new, item.old)
+            });
+
+            props.anything[0].nodeValue = 'SUCA';
+            props.hello[0].nodeValue = 'bohhhhhhhhhh';
+            props.ciao[0].nodeValue = 'ecco uno ciao';
+            props.altro[0].nodeValue = 'ancora ALTROOOOO';
             console.log(cmp.getContent());
 
-            cmp.dom.attributes[0].value = 'ciao';*/
-            // get properties
-            /*Array.prototype.slice.call(cmp.dom.attributes).forEach(function(item) {
-                console.log(item.name + ': '+ item.value);
-            });*/
         });
     });
 
