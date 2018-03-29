@@ -153,69 +153,15 @@ describe('Component', function () {
     describe('setProps', function () {
         it('should be new state', function () {
             const cmp = new Component('<div class={:className}>ciao {:anything} {:hello} {:hello}{:ciao}<div><div><img/><span><custom-cc>altro{:altro} testo</custom-cc></span></div></div> altro nodo</div>');
-            //console.log(cmp.dom.attributes[0]);
+            /*//console.log(cmp.dom.attributes[0]);
 
-            const regexAttr = /{:(.*?)}/;
-            const regexText = /{:(.*?)}/g;
 
-            cmp.dom.innerHTML = cmp.dom.innerHTML.replace(regexText, function replacer(match){
-                return '<medom-text-node value='+match+'></medom-text-node>';
-            } );
-
-            const props = {};
-            const textNodes = [];
-
-            function walkDOM(n) {
-                do {
-                    if (n.nodeType === 1) {
-                        Array.from(n.attributes).forEach(attribute => {
-                            const key = attribute.value.match(regexAttr);
-                            if (key) {
-                                const name = key[1];
-                                let component;
-
-                                if (n.nodeName === 'MEDOM-TEXT-NODE') {
-                                    component = document.createTextNode('');
-                                    textNodes.push({
-                                        old: n,
-                                        new: component
-                                    });
-                                } else {
-                                    component = attribute;
-                                }
-
-                                if (props.hasOwnProperty(name)) {
-                                    props[name].push(component);
-                                } else {
-                                    props[name] = [component];
-                                }
-                            }
-                        });
-
-                    }
-
-                    if (n.hasChildNodes()) {
-                        walkDOM(n.firstChild)
-                    }
-
-                } while (n = n.nextSibling)
-            }
-
-            walkDOM(cmp.dom);
-
-            console.log(props);
-
-            console.log(cmp.getContent());
-
-            textNodes.forEach(item => {
-                item.old.parentNode.replaceChild(item.new, item.old)
-            });
 
             props.anything[0].nodeValue = 'SUCA';
             props.hello[0].nodeValue = 'bohhhhhhhhhh';
             props.ciao[0].nodeValue = 'ecco uno ciao';
             props.altro[0].nodeValue = 'ancora ALTROOOOO';
-            console.log(cmp.getContent());
+            console.log(cmp.getContent());*/
 
         });
     });

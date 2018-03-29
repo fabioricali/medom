@@ -52,9 +52,6 @@ class Component {
 
         this.setState(this.cfg.state);
 
-        /*/<.*>(\s+)?({:.*?})(\s+)?<\/.*>/g
-
-        this.dom.innerHTML.replaceChild()*/
     }
 
     /**
