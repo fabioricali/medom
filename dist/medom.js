@@ -504,8 +504,12 @@ var Component = function () {
                 cmp[_key] = arguments[_key];
             }
 
+            console.log(cmp);
             cmp.forEach(function (item) {
-                if (Component.isComponent(item)) items.push(item.dom);
+                if (Component.isComponent(item)) items.push(item.dom);else {
+
+                    items.push(item);
+                }
             });
 
             var old = this.getContent();
@@ -615,28 +619,6 @@ var Component = function () {
         }
 
         /**
-         * Check if is a Medom component
-         * @param {*} cmp
-         * @returns {boolean}
-         */
-
-    }], [{
-        key: 'isComponent',
-        value: function isComponent(cmp) {
-            return cmp instanceof Component;
-        }
-
-        /**
-         * @ignore
-         */
-
-    }, {
-        key: 'isComponentEvent',
-        value: function isComponentEvent(eventName) {
-            return EVENTS.includes(eventName);
-        }
-
-        /**
          * Triggered when component content is changed
          * @event Component#beforeContentChange
          * @param {HTMLElement} candidate content
@@ -680,6 +662,27 @@ var Component = function () {
          * @param {Component} me
          */
 
+        /**
+         * Check if is a Medom component
+         * @param {*} cmp
+         * @returns {boolean}
+         */
+
+    }], [{
+        key: 'isComponent',
+        value: function isComponent(cmp) {
+            return cmp instanceof Component;
+        }
+
+        /**
+         * @ignore
+         */
+
+    }, {
+        key: 'isComponentEvent',
+        value: function isComponentEvent(eventName) {
+            return EVENTS.includes(eventName);
+        }
     }]);
 
     return Component;
@@ -714,14 +717,21 @@ function toArray(value) {
 var dom = {
     /**
      * Create DOM element
-     * @param str
+     * @param str html string or a single tag
      * @returns {Element | Node | null}
      */
     create: function create(str) {
-        var template = document.createElement('div');
+        var element;
         str = str.trim();
-        template.innerHTML = str;
-        var element = template.firstChild;
+
+        if (/<.*>/g.test(str)) {
+            var template = document.createElement('div');
+            template.innerHTML = str;
+            element = template.firstChild;
+        } else {
+            element = document.createElement(str);
+        }
+
         if (!this.isValidNode(element)) throw new Error('Element not valid');
         return element;
     },

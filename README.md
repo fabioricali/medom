@@ -56,6 +56,12 @@ myComponent
         * [.resumeEvent(...eventName)](#Component+resumeEvent) ⇒ [<code>Component</code>](#Component)
         * [.suspendEvents()](#Component+suspendEvents) ⇒ [<code>Component</code>](#Component)
         * [.resumeEvents()](#Component+resumeEvents) ⇒ [<code>Component</code>](#Component)
+        * ["beforeContentChange" (candidate, old, me)](#Component+event_beforeContentChange)
+        * ["contentChange" (current, old, me)](#Component+event_contentChange)
+        * ["show" (me)](#Component+event_show)
+        * ["hide" (me)](#Component+event_hide)
+        * ["beforeState" (newState, prevState, me)](#Component+event_beforeState)
+        * ["state" (state, prevState, me)](#Component+event_state)
     * _static_
         * [.isComponent(cmp)](#Component.isComponent) ⇒ <code>boolean</code>
 
@@ -155,7 +161,7 @@ Check if component is visibile
 Hide component
 
 **Kind**: instance method of [<code>Component</code>](#Component)  
-**Emits**: <code>Component#event:hide</code>  
+**Emits**: [<code>hide</code>](#Component+event_hide)  
 <table>
   <thead>
     <tr>
@@ -176,7 +182,7 @@ Hide component
 Show component
 
 **Kind**: instance method of [<code>Component</code>](#Component)  
-**Emits**: <code>Component#event:show</code>  
+**Emits**: [<code>show</code>](#Component+event_show)  
 <table>
   <thead>
     <tr>
@@ -199,7 +205,7 @@ Show component
 Set state
 
 **Kind**: instance method of [<code>Component</code>](#Component)  
-**Emits**: <code>Component#event:state</code>, <code>Component#event:beforeState</code>  
+**Emits**: [<code>state</code>](#Component+event_state), [<code>beforeState</code>](#Component+event_beforeState)  
 <table>
   <thead>
     <tr>
@@ -224,7 +230,7 @@ Get current state
 Update content
 
 **Kind**: instance method of [<code>Component</code>](#Component)  
-**Emits**: <code>Component#event:beforeContentChange</code>, <code>Component#event:contentChange</code>  
+**Emits**: [<code>beforeContentChange</code>](#Component+event_beforeContentChange), [<code>contentChange</code>](#Component+event_contentChange)  
 <table>
   <thead>
     <tr>
@@ -249,7 +255,7 @@ Get content
 Append other Medom components
 
 **Kind**: instance method of [<code>Component</code>](#Component)  
-**Emits**: <code>Component#event:contentChange</code>  
+**Emits**: [<code>contentChange</code>](#Component+event_contentChange)  
 <table>
   <thead>
     <tr>
@@ -258,7 +264,7 @@ Append other Medom components
   </thead>
   <tbody>
 <tr>
-    <td>...cmp</td><td><code><a href="#Component">Component</a></code></td><td><p>component to append</p>
+    <td>...cmp</td><td><code><a href="#Component">Component</a></code> | <code>HTMLElement</code></td><td><p>component to append</p>
 </td>
     </tr>  </tbody>
 </table>
@@ -357,6 +363,134 @@ Suspends all events, works only with native component event.
 Resume all events, works only with native component event.
 
 **Kind**: instance method of [<code>Component</code>](#Component)  
+<a name="Component+event_beforeContentChange"></a>
+
+### "beforeContentChange" (candidate, old, me)
+Triggered when component content is changed
+
+**Kind**: event emitted by [<code>Component</code>](#Component)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>candidate</td><td><code>HTMLElement</code></td><td><p>content</p>
+</td>
+    </tr><tr>
+    <td>old</td><td><code>HTMLElement</code></td><td><p>content</p>
+</td>
+    </tr><tr>
+    <td>me</td><td><code><a href="#Component">Component</a></code></td><td></td>
+    </tr>  </tbody>
+</table>
+
+<a name="Component+event_contentChange"></a>
+
+### "contentChange" (current, old, me)
+Triggered when component content is changed
+
+**Kind**: event emitted by [<code>Component</code>](#Component)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>current</td><td><code>HTMLElement</code></td><td><p>content</p>
+</td>
+    </tr><tr>
+    <td>old</td><td><code>HTMLElement</code></td><td><p>content</p>
+</td>
+    </tr><tr>
+    <td>me</td><td><code><a href="#Component">Component</a></code></td><td></td>
+    </tr>  </tbody>
+</table>
+
+<a name="Component+event_show"></a>
+
+### "show" (me)
+Triggered when component is show
+
+**Kind**: event emitted by [<code>Component</code>](#Component)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>me</td><td><code><a href="#Component">Component</a></code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="Component+event_hide"></a>
+
+### "hide" (me)
+Triggered when component is hidden
+
+**Kind**: event emitted by [<code>Component</code>](#Component)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>me</td><td><code><a href="#Component">Component</a></code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="Component+event_beforeState"></a>
+
+### "beforeState" (newState, prevState, me)
+Triggered before change state
+
+**Kind**: event emitted by [<code>Component</code>](#Component)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>newState</td><td><code>*</code></td>
+    </tr><tr>
+    <td>prevState</td><td><code>*</code></td>
+    </tr><tr>
+    <td>me</td><td><code><a href="#Component">Component</a></code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="Component+event_state"></a>
+
+### "state" (state, prevState, me)
+Triggered when component change state
+
+**Kind**: event emitted by [<code>Component</code>](#Component)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>state</td><td><code>*</code></td>
+    </tr><tr>
+    <td>prevState</td><td><code>*</code></td>
+    </tr><tr>
+    <td>me</td><td><code><a href="#Component">Component</a></code></td>
+    </tr>  </tbody>
+</table>
+
 <a name="Component.isComponent"></a>
 
 ### Component.isComponent(cmp) ⇒ <code>boolean</code>

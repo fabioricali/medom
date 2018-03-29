@@ -150,6 +150,82 @@ describe('Component', function () {
         });
     });
 
+    describe('setProps', function () {
+        it('should be new state', function () {
+            const cmp = new Component('<div class={:className}>ciao {:anything} {:hello} {:hello}{:ciao}<div><div><img/><span><custom-cc>altro{:altro} testo</custom-cc></span></div></div> altro nodo</div>');
+            //console.log(cmp.dom.attributes[0]);
+
+            const regexAttr = /{:(.*?)}/;
+            const regexText = /{:(.*?)}/g;
+
+            cmp.dom.innerHTML = cmp.dom.innerHTML.replace(regexText, function replacer(match){
+                return '<medom-text-node value='+match+'/>';
+            } );
+
+            const props = {};
+
+            function walkDOM(n) {
+                do {
+                    if (n.nodeType === 1) {
+                        console.log(n.nodeName);
+                        Array.from(n.attributes).forEach(attribute => {
+                            const key = attribute.value.match(regexAttr);
+                            if (key) {
+                                const name = key[1];
+                                if (props.hasOwnProperty(name)) {
+                                    props[name].push(attribute);
+                                } else {
+                                    props[name] = [attribute];
+                                }
+                            }
+                        });
+
+                    } else if (n.nodeType === 3) {
+                        /*n.__MEDOM__TEXT__NODE = true;
+                        let match;
+                        const tempAttr = [];
+                        while (match = regexText.exec(n.nodeValue)) {
+                            const name = match[1];
+                            const attribute = document.createTextNode('');
+                            if (props.hasOwnProperty(name)) {
+                                props[name].push(attribute);
+                            } else {
+                                props[name] = [attribute];
+                            }
+                        }*/
+
+                        //n.nodeValue = '<medom-text-node></medom-text-node>';
+
+                    }
+
+                    if (n.hasChildNodes() && !n.firstChild.__MEDOM__TEXT__NODE) {
+                        walkDOM(n.firstChild)
+                    }
+
+                } while (n = n.nextSibling)
+            }
+
+            walkDOM(cmp.dom);
+
+            console.log(props);
+            console.log(cmp.getContent());
+
+            /*console.log(cmp.getContent());
+            const text = document.createTextNode('hello');
+            cmp.append(text);
+            cmp.dom.replaceChild(document.createTextNode('hhhhhhhhhhh'), text);
+            console.log(cmp.getContent());
+            text.nodeValue = 'cambia?';
+            console.log(cmp.getContent());
+
+            cmp.dom.attributes[0].value = 'ciao';*/
+            // get properties
+            /*Array.prototype.slice.call(cmp.dom.attributes).forEach(function(item) {
+                console.log(item.name + ': '+ item.value);
+            });*/
+        });
+    });
+
     describe('isComponent', function () {
         it('should be true', function () {
             const cmp = new Component('<cmp-parent></cmp-parent>');

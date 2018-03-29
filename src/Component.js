@@ -51,6 +51,10 @@ class Component {
         this._visible = true;
 
         this.setState(this.cfg.state);
+
+        /*/<.*>(\s+)?({:.*?})(\s+)?<\/.*>/g
+
+        this.dom.innerHTML.replaceChild()*/
     }
 
     /**
@@ -195,17 +199,19 @@ class Component {
 
     /**
      * Append other Medom components
-     * @param {...Component} cmp component to append
+     * @param {...(Component|HTMLElement)} cmp component to append
      * @returns {Component}
      * @fires Component#contentChange
      */
     append(...cmp) {
 
         let items = [];
-
         cmp.forEach(item => {
             if (Component.isComponent(item))
                 items.push(item.dom);
+            else {
+                items.push(item);
+            }
         });
 
         const old = this.getContent();
@@ -293,22 +299,6 @@ class Component {
     }
 
     /**
-     * Check if is a Medom component
-     * @param {*} cmp
-     * @returns {boolean}
-     */
-    static isComponent(cmp) {
-        return cmp instanceof Component;
-    }
-
-    /**
-     * @ignore
-     */
-    static isComponentEvent(eventName) {
-        return EVENTS.includes(eventName);
-    }
-
-    /**
      * Triggered when component content is changed
      * @event Component#beforeContentChange
      * @param {HTMLElement} candidate content
@@ -352,6 +342,21 @@ class Component {
      * @param {Component} me
      */
 
+    /**
+     * Check if is a Medom component
+     * @param {*} cmp
+     * @returns {boolean}
+     */
+    static isComponent(cmp) {
+        return cmp instanceof Component;
+    }
+
+    /**
+     * @ignore
+     */
+    static isComponentEvent(eventName) {
+        return EVENTS.includes(eventName);
+    }
 }
 
 module.exports = Component;
