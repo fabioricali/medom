@@ -17,18 +17,20 @@ describe('parser', function () {
     beforeEach(function () {
         document.body.innerHTML = '';
     });
+
     describe('get props', function () {
         it('should be an object', function () {
 
             const tpl = ()=> {
                 return `
-                <div class={:className}>
-                    ciao {:anything} {:hello} {:hello}{:ciao}
+                <div class={{ className }}>
+                    ciao {{anything}} {{hello}} {{hello}}{{ciao}}
                     <div>
                         <div>
-                            <img src={:image}/>
+                            <img src={{image}}/>
                             <span>
-                                <custom-cc>other{:other} text</custom-cc>
+                                <custom-cc>other{{other}} text</custom-cc>
+                                <custom-cc>{{ item.nested }}</custom-cc>
                             </span>
                         </div>
                     </div> 

@@ -1,3 +1,6 @@
+const helper = require('./helper');
+const {PARSER} = require('../constants');
+
 /**
  * Parse component
  * @param cmp
@@ -5,10 +8,16 @@
  */
 function parser(cmp) {
 
-    const regexAttr = /{:(.*?)}/;
-    const regexText = /{:(.*?)}/g;
+    const props = {};
+    const textNodes = [];
+    const regexAttr = PARSER.REGEX.ATTR;
+    const regexText = PARSER.REGEX.TEXT;
 
-    function scanDOM(n) {
+    const el = cmp.hasOwnProperty('dom')
+        ? cmp.dom
+        : cmp || document.createElement('div');
+
+    function scanner(n) {
         do {
             if (n.nodeType === 1)
                 Array.from(n.attributes).forEach(attribute => {
@@ -17,7 +26,7 @@ function parser(cmp) {
                         const name = key[1];
                         let component;
 
-                        if (n.nodeName === 'MEDOM-TEXT-NODE') {
+                        if (n.nodeName.toLowerCase() === PARSER.TAG.TEXT) {
                             component = document.createTextNode('');
                             textNodes.push({
                                 old: n,
@@ -27,35 +36,24 @@ function parser(cmp) {
                             component = attribute;
                         }
 
-                        if (props.hasOwnProperty(name)) {
-                            props[name].push(component);
-                        } else {
-                            props[name] = [component];
-                        }
+                        helper.createProp(name, props, component);
+                        
                     }
                 });
 
             if (n.hasChildNodes()) {
-                scanDOM(n.firstChild)
+                scanner(n.firstChild)
             }
 
         } while (n = n.nextSibling)
     }
 
-    cmp.dom.innerHTML = cmp.dom.innerHTML.replace(regexText, function replacer(match) {
-        return '<medom-text-node value=' + match + '></medom-text-node>';
-    });
-
-    const props = {};
-    const textNodes = [];
-
-    scanDOM(cmp.dom);
-
-    textNodes.forEach(item => {
-        item.old.parentNode.replaceChild(item.new, item.old)
-    });
+    helper.transformTag(el, regexText);
+    scanner(el);
+    helper.replaceComponent(textNodes);
 
     return props;
 }
 
 module.exports = parser;
+module.exports.helper = helper;
