@@ -1,6 +1,7 @@
 const {PARSER} = require('../constants');
 
 function sanitize(field) {
+    //console.log('field', field);
     return field.replace(/[ "=]/g, '');
 }
 
@@ -19,17 +20,27 @@ function replaceComponent(textNodes) {
 }
 
 function createProp(name, props, component) {
-    if (name.includes('.')) {
-        name.split('.').reduce((o, i) => {
-            console.log(o, i);
-            return o[i]
-        }, props);
-    }
-    if (props.hasOwnProperty(name)) {
-        props[name].push(component);
-    } else {
-        props[name] = [component];
-    }
+    name.split('.').reduce((o, i, y, m) => {
+        const isLast = m[m.length - 1] === i;
+        if (isLast) {
+            if (o.hasOwnProperty(i)) {
+                if (!o[i].length)
+                    o[i] = [component];
+                else {
+                    if (!Array.isArray(o[i]))
+                        o[i] = [o[i]];
+                    o[i].push(component)
+                }
+            } else {
+                o[i] = component;
+            }
+        } else if (!o.hasOwnProperty(i)) {
+            o[i] = [];
+        }
+
+        return o[i]
+
+    }, props);
 }
 
 module.exports = {

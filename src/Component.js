@@ -1,12 +1,11 @@
 const html = require('dohtml');
 const extend = require('defaulty');
-const {ROOT, EVENTS} = require('./constants');
+const {ROOT, EVENTS, ATTR} = require('./constants');
 const Flak = require('flak');
 const DOM = require('./DOM');
 const equal = require('fast-deep-equal');
 const copy = require('deep-copy');
-
-const DATA_WIDGET = 'data-medom-widget';
+const parser = require('./parser');
 
 /**
  * @class
@@ -36,6 +35,16 @@ class Component {
             writable: true
         });
 
+        Object.defineProperty(this, 'propsMap', {
+            value: null,
+            writable: true
+        });
+
+        Object.defineProperty(this, 'props', {
+            value: null,
+            writable: true
+        });
+
         Object.defineProperty(this.dom, ROOT, {
             value: this
         });
@@ -45,10 +54,12 @@ class Component {
         });
 
         if (this.cfg.widget) {
-            this.dom.setAttribute(DATA_WIDGET, this.cfg.widget);
+            this.dom.setAttribute(ATTR.WIDGET, this.cfg.widget);
         }
 
         this._visible = true;
+
+        this.propsMap = parser(this.dom);
 
         this.setState(this.cfg.state);
 
@@ -60,7 +71,7 @@ class Component {
      * @returns {Component|undefined}
      */
     getWidget(widget) {
-        return DOM.getByQuery(`[${DATA_WIDGET}="${widget}"]`, this.dom);
+        return DOM.getByQuery(`[${ATTR.WIDGET}="${widget}"]`, this.dom);
     }
 
     /**
@@ -135,6 +146,32 @@ class Component {
 
         this.emitter.fire('show', this);
 
+        return this;
+    }
+
+    /**
+     * Set props
+     * @param {object} props
+     * @returns {Component}
+     * @fires Component#props
+     * @fires Component#beforeProps
+     */
+    setProps(props = {}) {
+        if (!equal(props, this.props)) {
+            const prevProps = copy(this.props);
+            const newProps = copy(props);
+
+            if (this.emitter.fireTheFirst('beforeProps', newProps, prevProps, this) === false) return this;
+
+            for(let p in props) {
+                if (props.hasOwnProperty(p) && this.propsMap.hasOwnProperty(p)) {
+                    this.propsMap[p].nodeValue = props[p];
+                }
+            }
+
+            this.state = newProps;
+            this.emitter.fire('props', this.state, prevProps, this);
+        }
         return this;
     }
 

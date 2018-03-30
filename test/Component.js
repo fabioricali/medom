@@ -152,17 +152,32 @@ describe('Component', function () {
 
     describe('setProps', function () {
         it('should be new state', function () {
-            const cmp = new Component('<div class={:className}>ciao {:anything} {:hello} {:hello}{:ciao}<div><div><img/><span><custom-cc>altro{:altro} testo</custom-cc></span></div></div> altro nodo</div>');
-            /*//console.log(cmp.dom.attributes[0]);
 
+            const tpl = ()=> {
+                return `
+                <div class={{className}}>
+                    Hello {{firstName}} {{lastName}}
+                    <div>
+                        <div>
+                            <span>
+                                <custom-cc>{{item.nested}}</custom-cc>
+                            </span>
+                        </div>
+                    </div> 
+                    other node
+                </div>
+                `
+            };
 
-
-            props.anything[0].nodeValue = 'SUCA';
-            props.hello[0].nodeValue = 'bohhhhhhhhhh';
-            props.ciao[0].nodeValue = 'ecco uno ciao';
-            props.altro[0].nodeValue = 'ancora ALTROOOOO';
-            console.log(cmp.getContent());*/
-
+            const cmp = new Component(tpl());
+            console.log(cmp.dom.outerHTML);
+            console.log(cmp.propsMap);
+            cmp.setProps({
+                firstName: 'Fabio',
+                lastName: 'Ricali'
+            });
+            console.log(cmp.dom.outerHTML);
+            console.log(cmp.propsMap);
         });
     });
 

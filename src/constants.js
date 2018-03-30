@@ -1,5 +1,6 @@
 module.exports = {
     ROOT: '__MEDOM__',
+    SIGN: '__MEDOM_SIGN__',
     EVENTS: [
         'show',
         'hide',
@@ -16,5 +17,8 @@ module.exports = {
         TAG: {
             TEXT: 'medom-text-node'
         }
+    },
+    ATTR: {
+        WIDGET: 'data-medom-widget'
     }
 };
