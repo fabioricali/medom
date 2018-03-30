@@ -174,7 +174,10 @@ describe('Component', function () {
             console.log(cmp.propsMap);
             cmp.setProps({
                 firstName: 'Fabio',
-                lastName: 'Ricali'
+                lastName: 'Ricali',
+                item: {
+                    nested: 'hello nested field'
+                }
             });
             console.log(cmp.dom.outerHTML);
             console.log(cmp.propsMap);

@@ -23,7 +23,7 @@ describe('parser', function () {
 
             const tpl = ()=> {
                 return `
-                <div class={{ className }}>
+                <div class={{className}} title="a title">
                     ciao {{anything}} {{hello}} {{hello}}{{ciao}}
                     <div>
                         <div>

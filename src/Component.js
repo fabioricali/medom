@@ -6,6 +6,7 @@ const DOM = require('./DOM');
 const equal = require('fast-deep-equal');
 const copy = require('deep-copy');
 const parser = require('./parser');
+const helper = require('./helper');
 
 /**
  * @class
@@ -163,11 +164,19 @@ class Component {
 
             if (this.emitter.fireTheFirst('beforeProps', newProps, prevProps, this) === false) return this;
 
-            for(let p in props) {
-                if (props.hasOwnProperty(p) && this.propsMap.hasOwnProperty(p)) {
-                    this.propsMap[p].nodeValue = props[p];
+            const find = (props, targetProps) => {
+                for(let p in props) {
+                    if (props.hasOwnProperty(p) && targetProps.hasOwnProperty(p)) {
+                        if (helper.isSigned(targetProps[p])) {
+                            targetProps[p].nodeValue = props[p];
+                        } else if (typeof props[p] === 'object') {
+                            find(props[p], targetProps[p]);
+                        }
+                    }
                 }
-            }
+            };
+
+            find(props, this.propsMap);
 
             this.state = newProps;
             this.emitter.fire('props', this.state, prevProps, this);
