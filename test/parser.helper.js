@@ -55,13 +55,16 @@ describe('parser.helper', function () {
 
             function co(name, anything) {
                 name.split('.').reduce((o, i, y, m) => {
-                    const last = m[m.length - 1];
-                    if (last === i) {
+                    const isLast = m[m.length - 1] === i;
+                    if (isLast) {
                         if (o.hasOwnProperty(i)) {
                             if (!o[i].length)
                                 o[i] = [anything];
-                            else
+                            else {
+                                /*if (!Array.isArray(o[i]))
+                                    o[i] = [];*/
                                 o[i].push(anything)
+                            }
                         } else {
                             o[i] = anything;
                         }
