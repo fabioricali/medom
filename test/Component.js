@@ -190,7 +190,7 @@ describe('Component', function () {
                 <div class="{{className}}">
                     Hello {{firstName}} {{lastName}}
                     <div>
-                        <div>
+                        <div class="{{otherClass}}">
                             <span>
                                 <custom-cc each="{{result}}">{{title}}</custom-cc>
                             </span>

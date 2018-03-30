@@ -11,8 +11,8 @@ module.exports = {
     ],
     PARSER: {
         REGEX: {
-            ATTR: /{{(.*?)}}/,
-            TEXT: /{{(.*?)}}/g
+            ATTR: /{{([\w.]+)}}/,
+            TEXT: /(?!<.){{([\w.]+)}}(?!.>)/g
         },
         TAG: {
             TEXT: 'medom-text-node'
