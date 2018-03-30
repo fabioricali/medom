@@ -22,7 +22,7 @@ function parser(cmp) {
             if (n.nodeType === 1) {
                 //console.log('attribute.value',Array.from(n.attributes));
                 Array.from(n.attributes).forEach(attribute => {
-                    //console.log('attribute.value', attribute.name);
+                    console.log('attribute', attribute.name, attribute.value);
                     const key = attribute.value.match(regexAttr);
                     if (key) {
                         const name = key[1];

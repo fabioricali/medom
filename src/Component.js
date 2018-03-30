@@ -178,8 +178,8 @@ class Component {
 
             find(props, this.propsMap);
 
-            this.state = newProps;
-            this.emitter.fire('props', this.state, prevProps, this);
+            this.props = newProps;
+            this.emitter.fire('props', this.props, prevProps, this);
         }
         return this;
     }

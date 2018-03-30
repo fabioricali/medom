@@ -81,6 +81,31 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
+module.exports = {
+    ROOT: '__MEDOM__',
+    SIGN: '__MEDOM_SIGN__',
+    EVENTS: ['show', 'hide', 'beforeContentChange', 'contentChange', 'state', 'beforeState'],
+    PARSER: {
+        REGEX: {
+            ATTR: /{{(.*?)}}/,
+            TEXT: /{{(.*?)}}/g
+        },
+        TAG: {
+            TEXT: 'medom-text-node'
+        }
+    },
+    ATTR: {
+        WIDGET: 'data-medom-widget'
+    }
+};
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 module.exports = function (module) {
 	if (!module.webpackPolyfill) {
 		module.deprecate = function () {};
@@ -105,18 +130,6 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = {
-    ROOT: '__MEDOM__',
-    EVENTS: ['show', 'hide', 'beforeContentChange', 'contentChange', 'state', 'beforeState']
-};
-
-/***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -127,7 +140,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _require = __webpack_require__(1),
+var _require = __webpack_require__(0),
     ROOT = _require.ROOT;
 
 var type = __webpack_require__(10);
@@ -246,6 +259,8 @@ module.exports = {
 "use strict";
 
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -253,16 +268,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var html = __webpack_require__(6);
 var extend = __webpack_require__(8);
 
-var _require = __webpack_require__(1),
+var _require = __webpack_require__(0),
     ROOT = _require.ROOT,
-    EVENTS = _require.EVENTS;
+    EVENTS = _require.EVENTS,
+    ATTR = _require.ATTR;
 
 var Flak = __webpack_require__(9);
 var DOM = __webpack_require__(2);
 var equal = __webpack_require__(11);
 var copy = __webpack_require__(12);
-
-var DATA_WIDGET = 'data-medom-widget';
+var parser = __webpack_require__(13);
+var helper = __webpack_require__(15);
 
 /**
  * @class
@@ -296,6 +312,16 @@ var Component = function () {
             writable: true
         });
 
+        Object.defineProperty(this, 'propsMap', {
+            value: null,
+            writable: true
+        });
+
+        Object.defineProperty(this, 'props', {
+            value: null,
+            writable: true
+        });
+
         Object.defineProperty(this.dom, ROOT, {
             value: this
         });
@@ -305,10 +331,12 @@ var Component = function () {
         });
 
         if (this.cfg.widget) {
-            this.dom.setAttribute(DATA_WIDGET, this.cfg.widget);
+            this.dom.setAttribute(ATTR.WIDGET, this.cfg.widget);
         }
 
         this._visible = true;
+
+        this.propsMap = parser(this.dom);
 
         this.setState(this.cfg.state);
     }
@@ -323,7 +351,7 @@ var Component = function () {
     _createClass(Component, [{
         key: 'getWidget',
         value: function getWidget(widget) {
-            return DOM.getByQuery('[' + DATA_WIDGET + '="' + widget + '"]', this.dom);
+            return DOM.getByQuery('[' + ATTR.WIDGET + '="' + widget + '"]', this.dom);
         }
 
         /**
@@ -421,6 +449,45 @@ var Component = function () {
         }
 
         /**
+         * Set props
+         * @param {object} props
+         * @returns {Component}
+         * @fires Component#props
+         * @fires Component#beforeProps
+         */
+
+    }, {
+        key: 'setProps',
+        value: function setProps() {
+            var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+            if (!equal(props, this.props)) {
+                var prevProps = copy(this.props);
+                var newProps = copy(props);
+
+                if (this.emitter.fireTheFirst('beforeProps', newProps, prevProps, this) === false) return this;
+
+                var find = function find(props, targetProps) {
+                    for (var p in props) {
+                        if (props.hasOwnProperty(p) && targetProps.hasOwnProperty(p)) {
+                            if (helper.isSigned(targetProps[p])) {
+                                targetProps[p].nodeValue = props[p];
+                            } else if (_typeof(props[p]) === 'object') {
+                                find(props[p], targetProps[p]);
+                            }
+                        }
+                    }
+                };
+
+                find(props, this.propsMap);
+
+                this.props = newProps;
+                this.emitter.fire('props', this.props, prevProps, this);
+            }
+            return this;
+        }
+
+        /**
          * Set state
          * @param {*} state
          * @returns {Component}
@@ -489,7 +556,7 @@ var Component = function () {
 
         /**
          * Append other Medom components
-         * @param {...Component} cmp component to append
+         * @param {...(Component|HTMLElement)} cmp component to append
          * @returns {Component}
          * @fires Component#contentChange
          */
@@ -504,10 +571,8 @@ var Component = function () {
                 cmp[_key] = arguments[_key];
             }
 
-            console.log(cmp);
             cmp.forEach(function (item) {
                 if (Component.isComponent(item)) items.push(item.dom);else {
-
                     items.push(item);
                 }
             });
@@ -1018,7 +1083,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     /******/)
   );
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)(module)))
 
 /***/ }),
 /* 9 */
@@ -1799,7 +1864,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
         /******/)
     );
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)(module)))
 
 /***/ }),
 /* 10 */
@@ -2019,6 +2084,153 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
   }
 });
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var helper = __webpack_require__(14);
+
+var _require = __webpack_require__(0),
+    PARSER = _require.PARSER,
+    SIGN = _require.SIGN;
+
+/**
+ * Parse component
+ * @param cmp
+ * @returns {{}}
+ */
+
+
+function parser(cmp) {
+
+    var props = {};
+    var textNodes = [];
+    var regexAttr = PARSER.REGEX.ATTR;
+    var regexText = PARSER.REGEX.TEXT;
+
+    var el = cmp.hasOwnProperty('dom') ? cmp.dom : cmp || document.createElement('div');
+
+    function scanner(n) {
+        do {
+            if (n.nodeType === 1) {
+                //console.log('attribute.value',Array.from(n.attributes));
+                Array.from(n.attributes).forEach(function (attribute) {
+                    //console.log('attribute.value', attribute.name);
+                    var key = attribute.value.match(regexAttr);
+                    if (key) {
+                        var name = key[1];
+                        var component = void 0;
+
+                        if (n.nodeName.toLowerCase() === PARSER.TAG.TEXT) {
+                            component = document.createTextNode('');
+                            textNodes.push({
+                                old: n,
+                                new: component
+                            });
+                        } else {
+                            component = attribute;
+                        }
+
+                        // Sign component
+                        component[SIGN] = true;
+
+                        helper.createProp(name, props, component);
+                    }
+                });
+            }
+            if (n.hasChildNodes()) {
+                scanner(n.firstChild);
+            }
+        } while (n = n.nextSibling);
+    }
+
+    helper.transformTag(el, regexText);
+    scanner(el);
+    helper.replaceComponent(textNodes);
+
+    return props;
+}
+
+module.exports = parser;
+module.exports.helper = helper;
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _require = __webpack_require__(0),
+    PARSER = _require.PARSER;
+
+function sanitize(field) {
+    //console.log('field', field);
+    return field.replace(/[ "=]/g, '');
+}
+
+function transformTag(el, regex) {
+    el.innerHTML = el.innerHTML.replace(regex, function replacer(match) {
+        // Remove spaces
+        match = sanitize(match);
+        return '<' + PARSER.TAG.TEXT + ' value=' + match + '></' + PARSER.TAG.TEXT + '>';
+    });
+}
+
+function replaceComponent(textNodes) {
+    textNodes.forEach(function (item) {
+        item.old.parentNode.replaceChild(item.new, item.old);
+    });
+}
+
+function createProp(name, props, component) {
+    name.split('.').reduce(function (o, i, y, m) {
+        var isLast = m[m.length - 1] === i;
+        if (isLast) {
+            if (o.hasOwnProperty(i)) {
+                if (!o[i].length) o[i] = [component];else {
+                    if (!Array.isArray(o[i])) o[i] = [o[i]];
+                    o[i].push(component);
+                }
+            } else {
+                o[i] = component;
+            }
+        } else if (!o.hasOwnProperty(i)) {
+            o[i] = [];
+        }
+
+        return o[i];
+    }, props);
+}
+
+module.exports = {
+    createProp: createProp,
+    sanitize: sanitize,
+    transformTag: transformTag,
+    replaceComponent: replaceComponent
+};
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _require = __webpack_require__(0),
+    SIGN = _require.SIGN;
+
+function isSigned(n) {
+    return n.hasOwnProperty(SIGN);
+}
+
+module.exports = {
+    isSigned: isSigned
+};
 
 /***/ })
 /******/ ]);

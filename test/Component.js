@@ -173,11 +173,46 @@ describe('Component', function () {
             console.log(cmp.dom.outerHTML);
             console.log(cmp.propsMap);
             cmp.setProps({
+                className: 'a-class',
                 firstName: 'Fabio',
                 lastName: 'Ricali',
                 item: {
                     nested: 'hello nested field'
                 }
+            });
+            console.log(cmp.dom.outerHTML);
+            console.log(cmp.propsMap);
+        });
+        it('loop', function () {
+
+            const tpl = ()=> {
+                return `
+                <div class="{{className}}">
+                    Hello {{firstName}} {{lastName}}
+                    <div>
+                        <div>
+                            <span>
+                                <custom-cc each="{{result}}">{{title}}</custom-cc>
+                            </span>
+                        </div>
+                    </div> 
+                    other node
+                </div>
+                `
+            };
+
+            const cmp = new Component(tpl());
+            console.log(cmp.dom.outerHTML);
+            console.log(cmp.propsMap);
+            cmp.setProps({
+                className: 'a-class',
+                firstName: 'Fabio',
+                lastName: 'Ricali',
+                result: [
+                    {title: 'ciao1'},
+                    {title: 'ciao2'},
+                    {title: 'ciao3'}
+                ]
             });
             console.log(cmp.dom.outerHTML);
             console.log(cmp.propsMap);
